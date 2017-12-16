@@ -42,7 +42,6 @@ Los operadores <<,>>, &, |, y ^ son operadores de bits. Esto es, pueden ser util
 * ~ Realiza el complmento de X.
 * ^ Realiza el exclusivo *OR*. Si cada bit en el output es el mismo que el correspondiente bit en *X* y *Y* es 0, y es el complemento del bit en *X* y en ese bit en *Y* es 1.
 
-
 ## Think Python, 2nd Edition
 
 Los lenguajes de programacion son lenguajes formales. Los cuales son disenados para una aplicacion en especifico. Un ejemplo de esto, es la notacion matematica y el lenguaje para representar las estructuras de las moleculas. 
