@@ -1,15 +1,15 @@
-# **Resumen de capitulos 1-3 de Python**
+# **Resumen de capítulos 1-3 de Python**
 ## Operadores
 * Suma +
 * Resta -
-* Multiplicacion *
-* Division /
-* Exponenciacion **
+* Multiplicación *
+* División /
+* Expotenciación **
 * Operador de Bits XOR ^
 
-Los operadores <<,>>, &, |, y ^ son operadores de bits. Ademas, pueden ser utilizados con numeros. Los cuales son tratados como un *string* de bits, escritos en binario. [Pagina de Operador de bit](https://wiki.python.org/moin/BitwiseOperators)
+Los operadores <<,>>, &, |, y ^ son operadores de bits. Ademas, pueden ser utilizados con números. Los cuales son tratados como un *string* de bits, escritos en binario. [Pagina de Operador de bit](https://wiki.python.org/moin/BitwiseOperators)
 
-* X << Y. Regresa *X* con los bits cambiados a la izquierda por *Y* lugares y al lado derecho son ceros. Es lo mismo que multiplicar X * (2 ** Y).
+ X << Y. Regresa *X* con los bits cambiados a la izquierda por *Y* lugares y al lado derecho son ceros. Es lo mismo que multiplicar X * (2 ** Y).
 
      **Ejemplos**:
 
@@ -39,21 +39,21 @@ Los operadores <<,>>, &, |, y ^ son operadores de bits. Ademas, pueden ser utili
         0000 000**1 1**000 = 24 Valor agregado a la izquierda.
 * **&** Realiza un *AND* de bit. Por cada bit en el output es 1 si corresponden los bits de *X* y los de *Y*, de lo contrario regresa 0.
 * **|** Realiza un *OR* de bit. Por cada bit en el output es 0 si corresponden los bits de *X* y los de *Y*, de lo contrario regresa 1.
-* **~** Realiza el complmento de X.
+* **~** Realiza el complemento de X.
 * **^** Realiza el exclusivo *OR*. Si cada bit en el output es el mismo que el correspondiente bit en *X* y *Y* es 0, y es el complemento del bit en *X* y en ese bit en *Y* es 1.
 
 ## Think Python, 2nd Edition
 
-Los lenguajes de programacion son lenguajes formales. Los cuales son disenados para una aplicacion en especifico. Un ejemplo de esto, es la notacion matematica y el lenguaje para representar las estructuras de las moleculas. 
-Los lenguajes formales tienden a tener una serie de reglas de sintaxis. Las reglas de sintaxis se pueden ver en dos formas **toquens** y **estructura**. Tokens son elementos basicos del lenguaje, como palabras, numeros. Uno de los problemas con la expresion  **3+ = 3 % 6** es que **%**no es un toquen legal. La segunda regla es la forma en que los toquens son combinados.
+Los lenguajes de programación son lenguajes formales. Los cuales son diseñados para una aplicación en especifico. Un ejemplo de esto, es la notación matemática y el lenguaje para representar las estructuras de las moléculas. 
+Los lenguajes formales tienden a tener una serie de reglas de sintaxis. Las reglas de sintaxis se pueden ver en dos formas **toquen** y **estructura**. Tokens son elementos básicos del lenguaje, como palabras, números. Uno de los problemas con la expresión  **3+ = 3 % 6** es que **%**no es un toquen legal. La segunda regla es la forma en que los toquens son combinados.
 
-**Parsing** es la accion de leer una oracion, donde tienes que decifrar la estructura.
+**Parsing** es la acción de leer una oración, donde tienes que descifrar la estructura.
 
 ## Python Essential
 
-El fundamento para la programacion en Python es **Read-Evaluate-Print Loop** (**REPL**). Aunque se puedan realizar otras tareas es esencialmente lo mismo ya que interactura con *REPL*.
+El fundamento para la programación en Python es **Read-Evaluate-Print Loop** (**REPL**). Aunque se puedan realizar otras tareas es esencialmente lo mismo ya que interactúa con *REPL*.
 
-Una expresion por si misma es un declaracion. Mientras que el valor de una expresion no sea *None*, REPL nos mostrata el valor de la expresion. Esta simple expresion nos permite realizar cosas como las siguientes en la consola de Python:
+Una expresión por si misma es un declaración. Mientras que el valor de una expresión no sea *None*, REPL nos mostrará el valor de la expresión. Esta simple expresión nos permite realizar cosas como las siguientes en la consola de Python:
 
 ```python
 >>> 355/113
@@ -62,9 +62,9 @@ Una expresion por si misma es un declaracion. Mientras que el valor de una expre
 
 ### Pydoc
 
-Pydoc es una aplicacion para mirar la mirar documentacion. La cual se ejecuta en la terminal del sistema operativo. Pydoc tiene dos modos de operacion:
+Pydoc es una aplicación para mirar la mirar documentación. La cual se ejecuta en la terminal del sistema operativo. Pydoc tiene dos modos de operación:
     
-* Puede mostrar documentacion de un paquete o modulo en especifico.
+* Puede mostrar documentación de un paquete o modulo en especifico.
     ```
     python3 -m pydoc math
     ```
@@ -78,13 +78,13 @@ Las dos variaciones mas comunes son:
 * import x
 * from x import y, z
 
-La primera version importa el modulo completo y crea el modulo como un objeto en el *namespace*. Para poder utilizar clases o funciones se debe de utilizar *x.math(), x.sin()*.
+La primera versión importa el modulo completo y crea el modulo como un objeto en el *namespace*. Para poder utilizar clases o funciones se debe de utilizar *x.math(), x.sin()*.
 
-La segunda version tambien importa el modulo, pero solo introduce los nombres seleccionados al *namespace*.
+La segunda versión también importa el modulo, pero solo introduce los nombres seleccionados al *namespace*.
 
 ### Python Package Index - PyPI
 
-Desarrolladores pueden registrar sus modulos de Python en PyPI. [PyPI](https://pypi.python.org)
+Desarrolladores pueden registrar sus módulos de Python en PyPI. [PyPI](https://pypi.python.org)
 
 
 ## Core Python Programming 2nd Edition Wesley Chun
@@ -104,7 +104,7 @@ num = raw_input('Introduzca un numero: ')
 print('El doble del numero : %d' % (int(num) * 2 ))
 ```
 
-Se utiliza la funcion *int* ya que es necesario convertir la variable *num* en entero para poder realizar la operacion.
+Se utiliza la función *int* ya que es necesario convertir la variable *num* en entero para poder realizar la operación.
 
 ```
 class int(object)
@@ -116,11 +116,11 @@ If x is not a number or if base is given, then x must be a string or Unicode obj
 ```
 ### Core Style: Keep user interaction outside of functions
 
-Las funciones deberan de mantenerse "limpias", estas deberan de ser usadas solamente para tomar parametros y proveer resultados. La excepcion a esta regla es si se crean funciones especializadas para obtener informacion del usuario o para mostrar informacion. **Como buena practica es recomendable separadas funciones en dos categorias:**
+Las funciones deberán de mantenerse "limpias", estas deberán de ser usadas solamente para tomar parámetros y proveer resultados. La excepción a esta regla es si se crean funciones especializadas para obtener información del usuario o para mostrar información. **Como buena practica es recomendable separadas funciones en dos categorías:**
 
-* Funciones que realizan( Interactuan con el usuario)
+* Funciones que realizan( Interactúan con el usuario)
 * Funciones que calculan (usualmente regresan resultados)
 
 
 ### Comments
-Existen un tipo especial de comentarios llamados *docstrings* o *string documentales*. Estos comentarios pueden ser agregados al inicio de modulos, clases o funciones. A diferencia de comentarios comunes, *docstrings* pueden ser accesados en tiempo de ejecucion y puede ser usado para generar automaticamente documentacion.
+
