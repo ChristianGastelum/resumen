@@ -64,7 +64,7 @@ Una expresión por si misma es un declaración. Mientras que el valor de una exp
 
 Pydoc es una aplicación para mirar la mirar documentación. La cual se ejecuta en la terminal del sistema operativo. Pydoc tiene dos modos de operación:
     
-* Puede mostrar documentación de un paquete o modulo en especifico.
+* Puede mostrar documentación de un paquete o módulo en especifico.
     ```
     python3 -m pydoc math
     ```
@@ -78,9 +78,9 @@ Las dos variaciones mas comunes son:
 * import x
 * from x import y, z
 
-La primera versión importa el modulo completo y crea el modulo como un objeto en el *namespace*. Para poder utilizar clases o funciones se debe de utilizar *x.math(), x.sin()*.
+La primera versión importa el módulo completo y crea el módulo como un objeto en el *namespace*. Para poder utilizar clases o funciones se debe de utilizar *x.math(), x.sin()*.
 
-La segunda versión también importa el modulo, pero solo introduce los nombres seleccionados al *namespace*.
+La segunda versión también importa el módulo, pero solo introduce los nombres seleccionados al *namespace*.
 
 ### Python Package Index - PyPI
 
@@ -120,7 +120,17 @@ Las funciones deberán de mantenerse "limpias", estas deberán de ser usadas sol
 
 * Funciones que realizan( Interactúan con el usuario)
 * Funciones que calculan (usualmente regresan resultados)
+ ### Comments
+
+ El comentario *Documentation string* también llamado *doc string* puede agregar comentario al inicio de un módulo, clase o función. Ademas, a diferencia de los comentarios comunes *doc strings* pueden ser accedidos en tiempo de ejecución.
 
 
-### Comments
+### List and Tuples
 
+Listas y tuplas pueden ser vistas como arreglos con los cuales se pueden almacenar un numero arbitrario de objetos. Los valores almacenados en estos arreglos pueden ser accedidos mediante el índice.
+* Listas. Utilizan **[ ]** y sus elementos y tamaño pueden cambiar.
+* Tuplas. Utilizan **( )** y sus elementos no pueden ser actualizados
+
+### Dictionaries
+
+Los diccionarios funcionan como matrices asociativas o hashes.Están formados por pares *Key-Value*.
