@@ -125,12 +125,9 @@ Las funciones deberán de mantenerse "limpias", estas deberán de ser usadas sol
  El comentario *Documentation string* también llamado *doc string* puede agregar comentario al inicio de un módulo, clase o función. Ademas, a diferencia de los comentarios comunes *doc strings* pueden ser accedidos en tiempo de ejecución.
 
 
-### List and Tuples
+### List, Tuples and Dictionaries
 
 Listas y tuplas pueden ser vistas como arreglos con los cuales se pueden almacenar un numero arbitrario de objetos. Los valores almacenados en estos arreglos pueden ser accedidos mediante el índice.
-* Listas. Utilizan **[ ]** y sus elementos y tamaño pueden cambiar.
-* Tuplas. Utilizan **( )** y sus elementos no pueden ser actualizados
-
-### Dictionaries
-
-Los diccionarios funcionan como matrices asociativas o hashes.Están formados por pares *Key-Value*.
+* Listas **[ ]**. Sus elementos y tamaño pueden cambiar.
+* Tuplas **( )**. Sus elementos no pueden ser actualizados
+* Dictionaries **{}**. Funcionan como matrices asociativas o hashes.Están formados por pares *Key-Value*.
