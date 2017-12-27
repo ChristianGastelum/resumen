@@ -1,4 +1,7 @@
 # **Resumen de capítulos 1-3 de Python**
+## Objetos
+En la vida cotidiana se pueden tener observar varios ejemplos de estos, un automóvil, una casa, un perro, etc., y estos tienen ciertas características, también, conocidas como *atributos* de un objeto y las acciones que puede realizar un objeto se le llaman métodos.
+
 ## Operadores
 * Suma +
 * Resta -
@@ -7,7 +10,7 @@
 * Expotenciación **
 * Operador de Bits XOR ^
 
-Los operadores <<,>>, &, |, y ^ son operadores de bits. Ademas, pueden ser utilizados con números. Los cuales son tratados como un *string* de bits, escritos en binario. [Pagina de Operador de bit](https://wiki.python.org/moin/BitwiseOperators)
+Los operadores <<,>>, &, |, y ^ son operadores de bits. Además, pueden ser utilizados con números. Los cuales son tratados como un *string* de bits, escritos en binario. [Pagina de Operador de bit](https://wiki.python.org/moin/BitwiseOperators)
 
  X << Y. Regresa *X* con los bits cambiados a la izquierda por *Y* lugares y al lado derecho son ceros. Es lo mismo que multiplicar X * (2 ** Y).
 
