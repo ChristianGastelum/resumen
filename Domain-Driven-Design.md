@@ -14,9 +14,12 @@ La programación orientada a objetos es utilizada para la implementación del mo
 
 ### Layered Architecture
 
-![Imagen](https://github.com/KillLoGiC/resumen/blob/master/images/screenshot_20171228_142937.png)
+![Imagen](https://github.com/KillLoGiC/resumen/blob/master/images/screenshot_20171228_142937.png "")
+
 Cuando se crea una aplicación de software, una gran parte de la aplicación no esta directamente relacionada con el dominio, pero es parte de la misma infraestructura o los servidores.
 
+Cuando se desarrolla un software complejo es recomendable dividirlo en **capas**, por lo que al desarrollar dentro de estas se tiene una mayor coherencia en las dependencias de las capas inferiores.
 
+El siguiente patrón de arquitectura trata de proveer acoplamiento ligero (*loose coupling*). ***Concentrar todo el código relacionado al modelo del dominio en una capa y aislarlo de la interfaz de usuario, aplicación, y infraestructura***. 
 
-![](https://www.instagram.com/p/BdCjCqQgsvR/?taken-by=things_no_one_asked_for)
+Los **objetos de dominio** son libres de responsabilidad de mostrarse, almacenarse, administración de tareas de aplicación, lo cual permite enfocarse a expresar el modelo de dominio.
