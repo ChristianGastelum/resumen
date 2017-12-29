@@ -14,5 +14,9 @@ La programación orientada a objetos es utilizada para la implementación del mo
 
 ### Layered Architecture
 
-![Imagen](~/Pictures/screenshot_20171228_142937.png)
+![Imagen](https://github.com/KillLoGiC/resumen/blob/master/images/screenshot_20171228_142937.png)
 Cuando se crea una aplicación de software, una gran parte de la aplicación no esta directamente relacionada con el dominio, pero es parte de la misma infraestructura o los servidores.
+
+
+
+![](https://www.instagram.com/p/BdCjCqQgsvR/?taken-by=things_no_one_asked_for)
