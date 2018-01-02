@@ -80,4 +80,5 @@ Es mejor si se almacena la dirección en un objeto por separado, y el objeto cli
 
 
 
-![imagen](https://github.com/killlogic/resumen/blob/master/images/sketch.png)
+
+![imagen](https://github.com/killlogic/resumen/blob/master/images/Sketch.png)
