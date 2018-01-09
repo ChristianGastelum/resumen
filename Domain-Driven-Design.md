@@ -163,6 +163,27 @@ Un ejemplo de agregación:
 
 ![aggregate](https://github.com/KillLoGiC/resumen/blob/master/images/aggregate.png)
 
+## Factories
+
+Cuando un objeto del cliente quiere crear otro objeto, llama al constructor y posiblemente da parámetros. Pero, cuando la construcción de un objeto es laborioso, la creación de un objeto involucra tener conocimiento de la estructura interna, y las relaciones de los objetos internos y sus reglas. Esto significa que cada objeto del cliente necesita mantener información sobre el objeto construido. Si el cliente pertenece a la capa de aplicación, una funcionalidad de la capa del dominio es movida fuera de esta, esto puede tener grandes repercusiones.
+
+*Fabricas* son utilizadas para encapsular el conocimiento necesario para crear objetos, ademas, se pueden utilizar para crear *aggregates*. 
+
+Hay diferentes formas de implementar:
+* Factory method.
+    Es un objeto el cual contiene y esconde el conocimiento necesario para crear otro objeto. Esto es útil cuando el cliente quiere crear un objeto el cual pertenece a un *aggregate*. La solución  es agregar un metodo a la raiz de *aggregate*, la cual se encarga de la creacion del objeto, imponen las reglas invariantes, y regresan una referencia al objeto, o una copia. 
+
+![factories](https://github.com/KillLoGiC/resumen/blob/master/images/factories.png)
+
+El 
+
+
+    
+* Abstract Factory.
+
+
+
+
 
 ### Simple factory pattern
 ```Python 
