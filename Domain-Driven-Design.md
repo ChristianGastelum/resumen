@@ -171,14 +171,24 @@ Cuando un objeto del cliente quiere crear otro objeto, llama al constructor y po
 
 Hay diferentes formas de implementar:
 * Factory method.
-    Es un objeto el cual contiene y esconde el conocimiento necesario para crear otro objeto. Esto es útil cuando el cliente quiere crear un objeto el cual pertenece a un *aggregate*. La solución  es agregar un metodo a la raiz de *aggregate*, la cual se encarga de la creacion del objeto, imponen las reglas invariantes, y regresan una referencia al objeto, o una copia. 
 
-![factories](https://github.com/KillLoGiC/resumen/blob/master/images/factories.png)
-
-El 
+     Es un objeto el cual contiene y esconde el conocimiento necesario para crear otro objeto. Esto es útil cuando el cliente quiere crear un objeto el cual pertenece a un *aggregate*. La solución  es agregar un metodo a la raiz de *aggregate*, la cual se encarga de la creacion del objeto, imponen las reglas invariantes, y regresan una referencia al objeto, o una copia. 
 
 
-    
+   ![factories](https://github.com/KillLoGiC/resumen/blob/master/images/factories.png)
+  
+     
+* El contenedor contiene componentes de cierto tipo. Es necesario cuando un componente sea creado pertenezca a un contenedor. El cliente llama al método *createComponent(Type t)*. El contenedor instancia un nuevo componente. La clase *concrete* es determinada en base a su tipo. Después de su creación, el componente es agregado a la colección de componentes del contenedor, y una copia es enviada al cliente.
+
+ Cuando utilizar un constructor:
+
+* Cuando la construcción no sea complicada
+- Cuando la creación de objetos no involucre la creación de otros, y todos los atributos necesitan pasar por el constructor 
+- Cuando el cliente este interesado en la implementación
+- Cuando sea tipo clase. Cuando no existe herencia.
+
+
+  
 * Abstract Factory.
 
 
