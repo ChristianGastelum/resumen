@@ -188,11 +188,7 @@ Hay diferentes formas de implementar:
 - Cuando sea tipo clase. Cuando no existe herencia.
 
 
-  
-* Abstract Factory.
-
-
-
+Las *fabricas* necesitan crear nuevos objetos, o reconstruir objetos los cuales ya existieron, pero son persistentes en una base de datos. Reconstruir entidades a memoria desde una base de datos es un proceso diferente a crear una nueva entidad. 
 
 
 ### Simple factory pattern
@@ -226,3 +222,28 @@ if __name__ == '__main__':
     animal = input("cat or dog")
     ff.make_sound(animal)
 ```
+
+
+## Repositories
+
+Como se hablo anteriormente, los constructores o fabricas se encargan de la creación de objetos. En OOP, para utilizar un objeto es necesario tener su referencia.Para tener tal referencial, el cliente debe de crear el objeto u obtenerlo. Ejemplo:
+
+> Para obtener un *objeto valor* de un *aggregate*, el cliente debe solicitarlo a la raíz.
+
+Ahora el problema es que el cliente necesita tener una referencia permanente a la raíz. Lo cual aumenta el acoplamiento.
+
+El propósito de *repositorios* es encapsular toda la lógica necesaria para obtener referencias de objetos. Los objetos del dominio no tendrán que lidiar con la capa de infraestructura para obtener las referencias necesarias.
+
+Los *repositorios* pueden almacenar referencias de algunos objetos. Cuándo el objeto es creado, puede ser almacenado en el *repositorio*, y luego ser extraído. El repositorio actúa como un lugar donde se almacenan objetos globales.
+
+Adicionalmente, los *repositorios* pueden tener *estrategias*. Donde, puede acceder a almacenamiento persistente u a otro almacenamiento. Podría utilizar diferentes lugares para almacenar diferentes tipos de objetos. **El objetivo principal es que el modelo del dominio no tenga necesidad de almacenar objetos o sus referencias, y acceder la capa de infraestructura**.
+
+Para cada tipo de objeto que necesita acceso global, crea un objeto que provea la ilusión de estar en memoria. Configura el acceso a través, de interfaces globales. Provee métodos para agregar y eliminar objetos. Provee métodos que seleccionen objetos utilizando restricciones y obtengan objetos instanciados, cuyos atributos cumplan con las restricciones deseadas. Delegar el almacenamiento de objetos y acceso a *repositorios*.
+
+**La implementacion de un *repositorio* puede estar cercanamente ligada a la capa de infraestructura, pero la interfaz del repositorio sera unicamente del dominio.**
+
+Cabe mencionar, que existe una relacion entre las *fabricas* y *repositorios*. Ambos manejan el ciclo de vida de los objetos. Mientras que, las *fabricas* crean los objetos, los *repositorios* se encargan de objetos ya existentes. En otras palabras, las *fabricas* deben de crear objetos, mientras que los *repositorios* encuentran objetos creados. Cuando un objeto nuevo es agregado a un *repositorio*, debio hacer sido creado por una *fabrica*, y luego ser agregado a un *repositorio*.
+
+Las  *fabricas* son puros del dominio, y los *repositorios* contienen enlaces a la infraestructura, ejemplo: a la base de datos.
+
+
