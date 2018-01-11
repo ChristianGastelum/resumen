@@ -47,4 +47,52 @@ En cualquier momento, un objeto puede tener un **estado**.
 
 Los diagramas de clase y objetos representan información estática. El **diagrama de secuencia** muestra las interacciones.
 
+> Utilizando el ejemplo de las lavadoras, los componentes de la lavadora incluye: una alarma, tubería de agua, tambor girador. Estos son objetos.
 
+¿Qué pasa cuando se invoca  el *uso de caso* "lavar ropa"?. Asumiendo que ya se completaron las funciones "añadir ropa", "añadir detergente" y "encendido".
+
+1. Al inicio de "remojado", el agua entra al tambor utilizando la tubería del agua.
+2. El tambor permanece estacionario por 5 minutos.
+3. AL final de "remojado", se deja de añadir agua.
+4. Al inicio de "lavado", el tambor empieza a moverse por 15 min.
+5. Al final de "lavado", el tambor desecha el agua.
+6. El tambor deja de girar.
+7. Al inicio de "enjuagado", se añade agua.
+8. El tambor inicia su movimiento
+9. Después de 15 min. ya no se vierte mas agua.
+10. Al final de "enjuagado", el tambor desecha el agua.
+11. El tambor deja de girar.
+12. Al inicio de "secado", el tambor gira por 5 min.
+13. Al final de "secado", el tambor deja de girar.
+14. La ropa esta limpia. 
+
+Suponiendo que alarma, tubería de agua, y tambor son objetos. Asumiendo que cada objeto tiene una o mas funciones. Los objetos trabajan juntos mandándose mensajes. Cada mensaje es una perdición  *sender-objetct* a *receiver-object*. 
+
+- **Alarma** puede tener las siguientes funciones:
+    - Tiempo para remojado
+    - Tiempo para lavado 
+    - Tiempo para enjuagado
+    - Tiempo para secado
+
+- **Tubería de agua**:
+    - Verter agua 
+    - Detener flujo del agua.
+
+- **Tambor**:
+    - Almacenar agua 
+    - Girar hacia adelante y hacia atrás
+    - Girar según las manecillas del reloj
+    - Detener rotación
+    - Bombear agua 
+
+En el diagrama que se presenta en la siguiente sección, se muestra como se utilizan estas funciones para crear un **diagrama  de secuencia**. 
+
+
+#### Activity Diagram 
+
+Las actividades que ocurren dentro de un *caso de uso* o dentro de comportamiento de un objeto típicamente ocurre en secuencia.
+
+
+#### Communication Diagram 
+
+Los elementos de un sistema trabajando en conjunto para alcanzar los objetivos del sistema. Se utiliza el *diagrama de secuencia* para realizar esa tarea.
