@@ -96,3 +96,69 @@ Las actividades que ocurren dentro de un *caso de uso* o dentro de comportamient
 #### Communication Diagram 
 
 Los elementos de un sistema trabajando en conjunto para alcanzar los objetivos del sistema. Se utiliza el *diagrama de secuencia* para realizar esa tarea.
+
+
+![Diagrama de Secuencia](https://github.com/KillLoGiC/resumen/blob/master/images/diagramaDeSecuencia.PNG)
+
+#### Deployment Diagram 
+
+El diagrama de despliegue muestra la arquitectura física. Puede representar computadoras, y sus conexiones entre ellas, también, muestra el software utilizado en estas. Cada computadora es representada por un **cubo**.
+
+![Diagrama de Despliegue](https://github.com/KillLoGiC/resumen/blob/master/images/deployDiagram.PNG)
+
+#### Interface
+
+Una interfaz es una clase que solo tiene funciones y no tiene atributos. Es un conjunto de comportamientos que se desea utilizar en múltiples ocasiones. UML utiliza el icono de clase con la palabra clave **<< Interfaz >>**.
+
+#### Stereotypes
+
+Los estereotipos permiten crear elementos basados en otros ya existentes. Se puede pensar como un tipo de alteracion de un elemento para generar otro.
+
+#### Dictionaries
+
+Los diccionarios permiten mantener un registro de todos los elementos creados en un modelo: clases, casos de uso, componentes, entre otros. Los diccionarios solo pueden trabajar con elementos ya existentes y con estereotipos basados en estos elementos.
+
+
+### Hour 2 Understanding Object-Orientation
+
+Un **objeto** es una instancia de una **clase**. Un objeto tiene una **estructura**. Osea, tiene **atributos** (propiedades) y comportamientos. Un comportamiento de un objeto consiste de **funciones**. **Atributos** y **funciones** juntos son llamados **caracteristicas**. 
+
+> Como objetos en la clase *Personas*, cada uno tiene estos atributos: altura, peso, y edad. Además, realizamos las siguientes operaciones: comer, dormir, leer, escribir, hablar, entre otros.
+
+
+Una clase es una plantilla para crear objetos.
+
+
+#### Abstractioon
+
+Abstracción significa, filtrar las propiedades y operaciones de objetos, hasta que queden las necesarias.
+
+#### Inheritance
+
+Lavadoras, refrigeradores, microondas son aparatos electrodomésticos. Se podría decir que, estos son una *subclase* de la clase *aparatos electrodomésticos*. **Las subclases heredan las propiedades de la clase, adicionalmente, tiene que tener sus propios atributos y funciones**.
+
+#### Polimorphism
+
+En algunas ocasiones, en diferentes clases pueden existir funciones con el mismo nombre.
+
+
+#### Encapsulation
+
+Cuando un objeto realiza sus funciones y estas funciones son escondidas.
+
+#### Associations
+
+Esto sucede cuando un objeto esta relacionado con otros de alguna forma.
+
+#### Aggregation
+
+Agregación involucra una fuerte relación entre los objetos.
+
+##### Composition
+
+Una composición existe cuando un componente cuando están dentro de un objeto compuesto.
+
+> Una camisa esta compuesta por: cuerpo, cuello, mangas, botones. Si quitamos el cuerpo el cuello se vuelve inservible. 
+
+
+
