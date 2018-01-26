@@ -38,3 +38,4 @@ Is un límite conceptual alrededor de una aplicación o un sistema finito. La ra
 #### Ubiquitous Language
 
 El lenguaje universal es un lenguaje compartido por un equipo que trabaja dentro de un dominio. El lenguaje esta enfocado en como se maneja el negocio y como opera.
+![Lenguaje Universal](https://github.com/KillLoGiC/resumen/blob/master/images/lenguajeUniversal.PNG)
