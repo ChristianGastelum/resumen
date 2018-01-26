@@ -31,3 +31,10 @@ Es un modelo basado en software, el cual esta basado en un dominio de negocio. T
 
 Primordialmente se debe de utilizar DDD en areas esenciales del negocio. *You invest in the nontrivial, the more complex stuff, the most valuable and important stuff that promises to return the greatest dividends*. Por esta razón se le llama *Core domain*. Este  y sus sub dominios son a los cuales se debe de enfocar  toda la atención. 
 
+#### Bounded Context
+Is un límite conceptual alrededor de una aplicación o un sistema finito. La razón detrás de este límite es acentuar que cada término, frase u oración (lenguaje universal) dentro del dominio tiene un significado específico. 
+
+
+#### Ubiquitous Language
+
+El lenguaje universal es un lenguaje compartido por un equipo que trabaja dentro de un dominio. El lenguaje esta enfocado en como se maneja el negocio y como opera.
