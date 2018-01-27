@@ -4,7 +4,7 @@
 
 > We strive to produce quality in the software we develop. We achieve some quality by using test to help us avoid delivering software with a fatal number of bugs. Yet, even if we could produce completely bug-free software, that in itself does not necessarily mean that a quality software model is designed.   *The software model—the way the software expresses the solution to the business goal being sought—could still suffer greatly*
 
-### Chapter 1. Getting Started With DDD
+ ### Chapter 1. Getting Started With DDD
 
 Los fundamentos principales de DDD están basados en la discusión, escuchar, entendimiento, descubrimiento, y valores de negocio, todo esto para poder centralizar el conocimiento. Si eres capaz de *entender el negocio* en el cual se basará, por lo menos podrá participar en el modelado del software y podrá participar en  el proceso de crear el  **lenguaje ubicuo**. (ubicuo. Está presente a un mismo tiempo en todas partes)
  
@@ -101,4 +101,4 @@ El dominio de esta empresa tiene cuatro subdominios:
 - Facturación
 - Envíos
 
-!(Un dominio con subdomios y limite de contextos)[https://github.com/KillLoGiC/resumen/blob/master/images/dominioSubdominio.png]
+![Un dominio con subdominio y limite de contextos](ttps://github.com/KillLoGiC/resumen/blob/master/images/dominioSubdominio.png)
