@@ -101,4 +101,4 @@ El dominio de esta empresa tiene cuatro subdominios:
 - Facturación
 - Envíos
 
-!(Un dominio con subdomios y limite de contextos)[]
+!(Un dominio con subdomios y limite de contextos)[https://github.com/KillLoGiC/resumen/blob/master/images/dominioSubdominio.png]
