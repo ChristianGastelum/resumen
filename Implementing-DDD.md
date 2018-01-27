@@ -6,10 +6,10 @@
 
 ### Chapter 1. Getting Started With DDD
 
-Los fundamentos principales de DDD están basados en la discusión, escuchar, entendimiento, descubrimiento, y valores de negocio, todo esto para poder centralizar el conocimiento. Si eres capaz de *entender el negocio* en el cual se basará, por lo menos podrá participar en el modelado del software y podrá participar en  el proceso de crear el  **lenguaje universal**.
+Los fundamentos principales de DDD están basados en la discusión, escuchar, entendimiento, descubrimiento, y valores de negocio, todo esto para poder centralizar el conocimiento. Si eres capaz de *entender el negocio* en el cual se basará, por lo menos podrá participar en el modelado del software y podrá participar en  el proceso de crear el  **lenguaje ubicuo**. (ubicuo. Está presente a un mismo tiempo en todas partes)
 
- Durante este proceso de creado del **lenguaje universal** es necesario entablar conversaciones con *expertos del dominio*.
-Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un * experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su area de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje universal**.
+ Durante este proceso de creado del **lenguaje ubicuo** es necesario entablar conversaciones con *expertos del dominio*.
+Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un * experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su area de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje ubicuo**.
 
 #### ¿Qué es un modelo del dominio?
 Es un modelo basado en software, el cual esta basado en un dominio de negocio. También considerado como *modelo objeto*, donde existen objetos, los cuales tienen datos y comportamientos en base al negocio. Crear un *modelo del domino* es esencial para poder utilizar DDD. Utilizando DDD los *modelos del dominio* tienden a ser pequeños y enfocados.
@@ -22,7 +22,7 @@ Es un modelo basado en software, el cual esta basado en un dominio de negocio. T
 - DDD provee técnicas de desarrollo de software, las cuales se encargan del diseño estratégico y táctico. **Diseño estratégico** ayuda a entender cuales son las inversiones que se tiene realizar con el software, que tipo de software existe para poder obtener un software rápido y seguro. **Diseño táctico** ayuda a desarrollar un solo *modelo de la solución*.
 
 #### Aspectos principales  de DDD
-1. Acerca a los expertos del dominio y desarrolladores para trabajar en conjunto para reflejar el modelo mental del experto. Al trabajar juntos los expertos del dominio y desarrolladores su principal objetivo es crear un lenguaje universal. Este lenguaje permitirá tener una mejor comunicación y un mayor entendimiento  sobre el dominio del negocio.
+1. Acerca a los expertos del dominio y desarrolladores para trabajar en conjunto para reflejar el modelo mental del experto. Al trabajar juntos los expertos del dominio y desarrolladores su principal objetivo es crear un lenguaje ubicuo. Este lenguaje permitirá tener una mejor comunicación y un mayor entendimiento  sobre el dominio del negocio.
 2. DDD aborda las iniciativas estratégicas de la empresa.  Aunque DDD incluya técnicas de análisis, esta mas enfocado con la estrategia  de dirección de la empresa. Los aspectos técnicos de la estrategia del diseño tiene como objetivo crear *bounding system* y preocupaciones de negocios.
 3. Tácticas de diseño permiten a los desarrolladores  producir un software que  esta correctamente codificado en base a los conocimientos de los expertos del  dominio,  es escalable, y permite cómputo distribuido. 
 
@@ -32,10 +32,31 @@ Es un modelo basado en software, el cual esta basado en un dominio de negocio. T
 Primordialmente se debe de utilizar DDD en areas esenciales del negocio. *You invest in the nontrivial, the more complex stuff, the most valuable and important stuff that promises to return the greatest dividends*. Por esta razón se le llama *Core domain*. Este  y sus sub dominios son a los cuales se debe de enfocar  toda la atención. 
 
 #### Bounded Context
-Is un límite conceptual alrededor de una aplicación o un sistema finito. La razón detrás de este límite es acentuar que cada término, frase u oración (lenguaje universal) dentro del dominio tiene un significado específico. 
+Is un límite conceptual alrededor de una aplicación o un sistema finito. La razón detrás de este límite es acentuar que cada término, frase u oración (lenguaje ubicuo) dentro del dominio tiene un significado específico. 
 
 
 #### Ubiquitous Language
 
-El lenguaje universal es un lenguaje compartido por un equipo que trabaja dentro de un dominio. El lenguaje esta enfocado en como se maneja el negocio y como opera.
+El lenguaje ubicuo es un lenguaje compartido por un equipo que trabaja dentro de un dominio. El lenguaje esta enfocado en como se maneja el negocio y como opera.
 ![Lenguaje Universal](https://github.com/KillLoGiC/resumen/blob/master/images/lenguajeUniversal.PNG)
+
+#### How do you capture this all-important Ubiquitous Language?
+
+- Dibujar el modelo físico y conceptual, adicionalmente etiquetarlo con nombres y acciones. Estos dibujos son principalmente informales pero pueden contener aspectos formales de modelado. Al inicio del modelo es mejor evitar utilizar UML para evitar complicaciones.
+- Crear un glosario de terminos con definiciones simples. Agregar termines alternativos, incluir opciones adicionales 
+
+> *In the end it is team speech and the model in the code that are the most enduring and the only guaranteed current denotations of the Ubiquitous Language*
+
+**El modelo del software incorpora sustantivos, adjetivos, verbos y expresiones formales**. 
+
+#### Basic concepts of Ubiquitous Language:
+- Ubicuo significa que se encuentra en todos lados, tal como se habla entre el equipo y expresado en un mismo dominio.
+- El lenguaje ubicuo esta limitado a un contexto dentro de un dominio.
+- Pueden haber multiples límites contextuales los cuales son integrados por *mapas contextuales*, cada uno de estos tiene su propio lenguaje ubicuo, y algunos terminos coincidir. 
+
+
+#### Value and benefits of DDD 
+
+1. Organizaciones ganan un modelo útil de su dominio 
+2. Una definición refinada y precisa del negocio es desarollado.
+3. Expertos del dominio contribuyen al diseño del software. 
