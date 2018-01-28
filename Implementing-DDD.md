@@ -10,7 +10,7 @@ Los fundamentos principales de DDD están basados en la discusión, escuchar, en
  
 
  Durante este proceso de creado del **lenguaje ubicuo** es necesario entablar conversaciones con *expertos del dominio*.
-Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un * experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su area de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje ubicuo**.
+Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un * experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su área de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje ubicuo**.
 
 #### ¿Qué es un modelo del dominio?
 Es un modelo basado en software, el cual esta basado en un dominio de negocio. También considerado como *modelo objeto*, donde existen objetos, los cuales tienen datos y comportamientos en base al negocio. Crear un *modelo del domino* es esencial para poder utilizar DDD. Utilizando DDD los *modelos del dominio* tienden a ser pequeños y enfocados.
@@ -70,18 +70,18 @@ El lenguaje ubicuo es un lenguaje compartido por un equipo que trabaja dentro de
 4. Mejor experiencia de usuario.
     
     Usualmente, la retroalimentación del usuario puede transformarse en un mejor reflejo del modelo del dominio. Cuando el software deja mucho al entendimiento del usuario, los usuarios necesitan ser entrenados para poder utilizarlo. En esencia, el usuario solo transfiere su entendimiento del software a datos, los cuales son introducidos al software. Estos datos son guardados. Sí el usuario no entiende exactamente que  es lo que necesita introducir, entonces, los resultados no son los correctos. 
-5. Los limites son claros, los cuales son planteados alrededor de los modelos.
+5. Los límites son claros, los cuales son planteados alrededor de los modelos.
     
    Los desarrolladores son  orientados a utilizar  un enfoque  de negocio.  
 6. La arquitectura empresarial es mejor organizada.
     
-    Cuando los limites del contexto son bien definidos y cuidadosamente particionados, todos los equipos  tienen un  claro entendimiento  de *donde* y  *por que* las integraciones son necesarias. Los limites son  explícitos,  y las relaciones entre ellos también. 
+    Cuando los límites del contexto son bien definidos y cuidadosamente particionados, todos los equipos  tienen un  claro entendimiento  de *donde* y  *por que* las integraciones son necesarias. Los límites son  explícitos,  y las relaciones entre ellos también. 
 7. Ágil, iterativo(repetitivo), modelado continuo es usado.
     
     El objetivo de DDD es refinar el modelo mental de los expertos del dominio a un modelo útil para el negocio.
 8. Nuevas herramientas, estratégica y tácticas, son utilizadas.
     
-    El limite contextual da al equipo limites de modelado en donde se crea una solución para un problema especifico en el dominio. Dentro de un limite contextual un lenguaje ubicuo es creado. Este, es utilizado por el equipo y en el modelo del software. Dentro de un limite de modelado pueden utilizar tácticas: *Aggregates, Entidades, Objeto Valor, Servicios, Eventos del Dominio, entre otros*.
+    El límite contextual da al equipo límites de modelado en donde se crea una solución para un problema especifico en el dominio. Dentro de un límite contextual un lenguaje ubicuo es creado. Este, es utilizado por el equipo y en el modelo del software. Dentro de un límite de modelado pueden utilizar tácticas: *Aggregates, Entidades, Objeto Valor, Servicios, Eventos del Dominio, entre otros*.
 
 
 **Un dominio es modelado a través de software, por lo que es necesario tener cuidado que objeto realiza que**. Esto se trata de diseñar el comportamiento de los objetos. Si, es necesario que los comportamientos sean llamados apropiadamente de acuerdo al lenguaje ubicuo. Cada comportamiento de los objetos debe ser considerado.
@@ -101,4 +101,50 @@ El dominio de esta empresa tiene cuatro subdominios:
 - Facturación
 - Envíos
 
-![Un dominio con subdominio y limite de contextos](https://github.com/KillLoGiC/resumen/blob/master/images/dominioSubdominio.png)
+![Un dominio con subdominios y límite de contextos](https://github.com/KillLoGiC/resumen/blob/master/images/dominioSubdominio.png)
+
+Nótese que existen tres sistemas físicos  esenciales para la existencia del dominio del negocio, y solo dos  son internos. 
+
+Estos dos sistemas  representan dos  limités de contexto. 
+Dentro del límite de contexto existen múltiples modelos de dominio(catálogo ordenes, facturación, envíos) aunque no estén separados. Estos dominios fueron fusionados dentro de un modelo de software. Lo cual  dificulta agregar nuevas funcionalidades, ya que existen dependencias.
+Dentro de las dificultades que presenta una empresa pequeña es el límite de fondos y almacén. La empresa no debe de sobre invertir en productos si no se están vendiendo bien. 
+
+Lo que podría ayudar en un futuro a la empresa seria contar con un sistema que se base en oferta-demanda de artículos basado en tendencias pasadas para poder tenerlos en inventario. Tal sistema de *previsión* podría consistir de un *dominio central*, porque no es un problema simple de resolver, y tenerlo podría establecer una ventaja. **El subdominio de *Ordenes* y  el límite de contexto de *Inventario* integrado con *previsión* podrán proveer historial de ventas**.
+
+En algunas ocasiones un subdominio puede estar conformado de un conjunto de algoritmos. Tales subdominios pueden ser separados del dominio central usando *Módulos*.
+
+Nótese que el límite contextual no necesariamente esta en un subdominio, sino que puede estar en varios.
+
+#### Real-World Domains and Subdomains
+
+Los dominios tienen *problem space* y *solution space*. El espacio del problema nos permite pensar en una estrategia de negocio para solucionarlo, mientras que el espacio de la solución se enfoca en como  podemos implementar software para resolver el problema. 
+
+- El espacio del problema es la parte del dominio que necesita ser desarrollado para poder proveer un nuevo Dominio Central. Para evaluar el espacio del problema es necesario examinar los subdominios que *existen actualmente y los cuales son necesarios*. Por lo tanto, el espacio del problema es la combinación del Dominio Central y los subdominios que debe de usar. Los subdominios nos permiten tener ver diferentes partes del dominio que son necesarias para poder resolver el problema.
+- El espacio de la solución es uno o mas límites  del contexto, y  un conjunto de modelos de software. Esto es porque el límite de contexto es una solución especifica, *realization view*. El límite del contexto es utilizado para  crear una solución en software 
+
+Uña meta deseable es poder alinear un subdominio con un límite de contexto en relación uno-a-uno. Esto permite segregar modelos de dominio en áreas bien definidas en áreas de negocio basado por su objetivo. En un dominio complejo se puede utilizar una vista de evaluación(*assessment view*) para poder entender nuestro espacio del problema. Lo cual, nos permite dividir conceptual mente un límite de contexto en dos o mas subdominios, o múltiples límites de contextos.
+
+#### Before we can execute a specific solution, we need to make an assessment of the problem space and the solution space. 
+
+- ¿Cuál es el nombre o la visión estratégica del dominio central?
+- ¿Qué conceptos se deben de considerar como parte de la estratégica del dominio central?
+- ¿Cuáles son los dominios de soporte y genéricos necesarios para el dominio central?
+- ¿Quiénes deberán de trabajar en cada área del dominio?
+- ¿Es posible crear los equipos de trabajo?
+
+
+Una vez que se tiene un buen entendimiento del espacio del problema, es tiempo de pensar en el espacio de la solución. El espacio de la solución esta influenciado por tecnologías y sistemas existentes. Aquí, es necesario pensar en términos claramente separados del límite del contexto por que estamos mirando el lenguaje ubicuo.
+
+- ¿Cuáles son los software que existen actualmente, pueden ser reutilizados?
+- ¿Cuáles son los vienes que necesitamos adquirir o crear?
+- ¿Cómo están conectados entre ellos, o integrados?
+- ¿Es necesario tener una integración adicional?
+- ¿Dado los vienes existentes y los que deben ser creados, Cuál es el esfuerzo requerido?
+- ¿Poner en acción el plan estratégico y todos los proyectos secundarios tienen una alta probabilidad de éxito, o uno de ellos puede causar el retraso o falla del proyecto?
+- ¿Los términos del lenguaje ubicuo donde están involucrados son totalmente diferentes ?
+- ¿Cómo son mapeados o traducidos los términos y conceptos entre los límites de los contextos?
+- ¿Cuáles de los límites del contexto contienen conceptos que abordan el Dominio central y cuales patrones serán usados para modelarlo?
+
+#### Making Sense of Bounded Contexts 
+
+Un límite de contexto es un limite explicito en donde el modelo del dominio existe. El modelo del dominio expresa un Lenguaje ubicuo como modelo de software. Los limites son creados porque cada conceptos dentro del modelo, con sus propiedades y operaciones tienen un significado especial. 
