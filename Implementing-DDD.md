@@ -147,4 +147,44 @@ Una vez que se tiene un buen entendimiento del espacio del problema, es tiempo d
 
 #### Making Sense of Bounded Contexts 
 
-Un límite de contexto es un limite explicito en donde el modelo del dominio existe. El modelo del dominio expresa un Lenguaje ubicuo como modelo de software. Los limites son creados porque cada conceptos dentro del modelo, con sus propiedades y operaciones tienen un significado especial. 
+Un límite de contexto es un límite explicito en donde el modelo del dominio existe. El modelo del dominio expresa un Lenguaje ubicuo como modelo de software. Los límites son creados porque cada conceptos dentro del modelo, con sus propiedades y operaciones tienen un significado especial. 
+
+Es común que dentro de dos diferentes modelos, objetos con el mismo o nombre similar tengan diferentes significados. Cuando un límite es puesto al rededor de dos modelos, el significado de cada concepto en cada Contexto es exacto. En consecuencia, un límite de contexto es principalmente un límite lingüístico.
+
+## Chapter 3. Context Maps 
+
+#### Drawing Context Maps 
+
+Un *mapa contextual* captura el terreno existente. Primero, debes de mapear el presente, no imaginar el futuro. Sí,  la visión cambia durante el transcurso del proyecto, el mapa se puede actualizar. 
+
+Existen múltiples patrones de organización e integración, que existen comúnmente entre dos límites de contexto.
+
+- **Partnership**: Es una relación de cooperación entre equipos en dos contextos. Los equipos deben de cooperar en la evolución de sus interfaces para adaptar el desarrollo que se necesita en ambos sistemas. 
+- **Shared Kernel**: Se comparte una parte del modelo y asocia formas de código con interdependencias. Es necesario designar  límites   en  subconjuntos  del modelo del dominio donde los equipos  acuerden. 
+- **Customer-Supplier Development**: Cuando dos equipos están en una relación *proveedor-cliente*, donde el equipo *proveedor* puede tener éxito independientemente del equipo *cliente*. En el caso contrario, el equipo *cliente* necesita del equipo *proveedor* para su éxito.
+- **Conformist**: Cuando dos equipos de desarrolladores tienen una relación proveedor-cliente, pero el equipo proveedor no tiene interés de ayudar al otro equipo.
+- **Anticorruption Layer**: Las capas de traslado pueden ser simples cuando es el puente entre dos bien definidos límites de contexto. Pero cuando la comunicación o el control no es adecuado en un *shared kernel*, el traslado puede ser muy complejo. Como cliente *downstream*, crea una capa aislada que provee al sistema funcionalidades del sistema *upstream* en términos del modelo del dominio. Un servicio de dominio (*Domain Service*) puede ser definido en el contexto del cliente por cada tipo de capa de anticorrupción. Si se utiliza REST, un servicio de dominio del cliente accede a un *Open Host Service OHS*. El servidor responde produciendo una representación como *Published Language*.  La capa de anti corrupción del cliente traduce la representación a un objeto de dominio en el contexto local.
+- **Open Host Service**: Define un protocolo que da acceso a tu subsistema como un conjunto de servicios. Abre el protocolo para todo aquel que necesite integrarlo pueda utilizarlo. Mejora y expande el protocolo para que pueda soportar nuevos requerimientos.  Este patrón puede ser implementado utilizando recursos **REST**, los cuales el límite del dominio del cliente puede utilizar.
+- **Published Language**: El traslado entre modelos de dos límites de contextos requiere un lenguaje en común. Utiliza un lenguaje bien documentado que pueda expresar la información necesaria del dominio. Puede ser implementado de varias maneras, ya sea utilizando XML, JSON o en algunas ocasiones HTML. También puede ser utilizado como **Event-Driven Architecture**.
+- **Separate Ways**: Debemos ser despiadados cuando se trate de definir términos. Si dos conjuntos de funcionalidad no tiene una relación significativa, pueden estar separados. Integración puede ser costosa, y puede en algunas ocasiones tener pocos beneficios. Si es posible, declara un límite de contextos sin ninguna conexión entre ellos, lo cual permite al desarrollador encontrar soluciones simples y especializadas dentro de un alcance.
+- **Big Ball of Mud**: Esto sucede cuando los modelos son mezclados y sus límites son inconsistentes. Modelar límites acerca este desastre y diseñarlo es una *big ball of mud*. 
+
+
+Comúnmente la integración de sistemas se basa en RPC. A diferencia de una llamada local, una llamada remote tiene gran potencial de de legración de rendimiento o falla. Cuando el sistema al cual se le realiza la llamada no esta disponible, la petición no es exitosa. Lo cual genera un gran nivel de dependencia. Para poder reducir este nivel es necesario utilizar estrategias, tales como *out-of-band*, asíncrono, procesos por eventos.
+
+Un gran nivel de autonomía puede ser alcanzado cuando el *estado dependiente* se encuentra en el sistema local. Esto puede verse como *cache* de objetos. En lugar de esto, se crea objetos en el dominio local, traduciéndolos de la petición realizada al modelo *upstream*. Para poder obtener el estado es necesario crear llamadas  RPC bien definidas , o peticiones REST pero cuando sea necesario sincronizar cambios con un modelo remoto, la mejor forma de realizar esto es a través de notificaciones *message-oriented*. Estas notificaciones pueden ser enviadas utilizando un servicio de bus o cola de mensajes, o publicada via REST.
+
+### Chapter 4 Architecture
+Una de las grandes ventajas de DDD es que no requiere el uso específico de una arquitectura. Ya que se ha creado el dominio Central, el cual reside en el limite de contexto, esto permite a una o varias arquitecturas jugar un papel en el sistema. Algunas arquitecturas pueden influenciar el modelo del dominio y tener un gran efecto. El objetivo es *use just the right choices and combinations of architecture and architecture patterns*.
+
+La demanda de  la calidad de software deberá  alentar al uso de estilos de arquitecturas y patrones.  Los seleccionados deberán proveer o exceder los requisitos de calidad  
+
+#### layers
+El patrón de arquitectura de capas es considera por muchos como el abuelo de todos. Soporte N-sistemas y es comúnmente utilizado en la web, empresas, y aplicaciones de escritorio. 
+
+**Separa la expresión del modelo del dominio y la lógica de negocio, y elimina cualquier dependencia de infraestructura, interfaz de usuario, o lógica de aplicación que no sea lógica de negocio. Divide software complejo en capas. Desarrolla un diseño dentro de cada capa que sea coherente y depende únicamente de la capa anterior.
+
+El dominio central reside en una capa en la arquitectura. Arriba esta la interfaz de usuario UI, y capas de aplicación. Debajo de todo esta la capa de infraestructura.
+
+
+
