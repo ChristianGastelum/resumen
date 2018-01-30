@@ -1,7 +1,7 @@
 # Implementing Domain-Driven Design by Vaughn Vernon
         
 ## Author: Christian Eder Gastélum Reyes
-
+ 
 > We strive to produce quality in the software we develop. We achieve some quality by using test to help us avoid delivering software with a fatal number of bugs. Yet, even if we could produce completely bug-free software, that in itself does not necessarily mean that a quality software model is designed.   *The software model—the way the software expresses the solution to the business goal being sought—could still suffer greatly*
 
  ### Chapter 1. Getting Started With DDD
@@ -188,3 +188,4 @@ El dominio central reside en una capa en la arquitectura. Arriba esta la interfa
 
 
 
+![Capas ](https://github.com/KillLoGiC/resumen/blob/master/images/layers.png)
