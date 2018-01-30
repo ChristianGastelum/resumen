@@ -186,6 +186,20 @@ El patrón de arquitectura de capas es considera por muchos como el abuelo de to
 
 El dominio central reside en una capa en la arquitectura. Arriba esta la interfaz de usuario UI, y capas de aplicación. Debajo de todo esta la capa de infraestructura.
 
-
-
 ![Capas ](https://github.com/KillLoGiC/resumen/blob/master/images/layers.png)
+
+La interfaz de usuario contiene únicamente código de direcciones de vista de usuarios (*user view*) y solicitud.  **No deberá contener lógica de dominio/negocio**. Si la interfaz de usuario utiliza objetos del modelo del dominio, generalmente es limitado a representar los datos. Si se utiliza este acercamiento, un *modelo de Presentacion* puede ser utilizado para prever el conocer acerca de objetos del dominio. *Open Host Service OHS* puede ser utilizado para proveer invocaciones remotas de una API.
+
+*Application Services* residen en la capa de aplicación. Estos son diferente de *servicios del dominio*. Por lo tanto, carecen de lógica de dominio. Pueden controlar transacciones y seguridad. Ademas, pueden estar encargados de notificaciones basado en eventos. **Las *Application Services* en este capa son los clientes directos del modelo del dominio, aunque estos no posean lógica de negocios. Estos permanecen ligeros y coordinan operaciones realizadas en objetos del dominio, como **Aggregates**. Comúnmente la función de *Application Services* es aceptar parámetros de la UI, utiliza *Repository* para obtener una instancia de *Aggregates*, y entonces ejecuta operaciones en el.
+
+Cuando un nuevo *Aggregates* deba ser creado,  *Application Services* utilizará  una *Factory* o un constructor para ser instanciado y, después,  utilizar el correspondiente repositorio. 
+
+Cuando el modelo del dominio es diseñado para publicar *Domain events*, la capa de aplicación puede subscribirse a un numero de eventos. Haciendo esto permite que los eventos sean almacenados, reenviado. Esto permite al modelo del dominio que se enfoque únicamente a su núcleo y permite a *Domain Event Publisher* de mantenerse ligero y libre de dependencias de infraestructura. 
+
+#### Hexagonal or Port and Adapters
+
+Permite a a múltiples clientes interactuar con el sistema.
+> Necesitas un nuevo cliente?. Agrega un adaptador para transformar el input del cliente a uno que sea entendido por la API interna de la aplicacion. 
+
+**Un adaptador es creado para transformar los resultados de una aplicacion a una salida aceptable**.
+Existen dos areas primarias, *outside* y *inside*. La parte exterior permite a los clientes enviar entradas(*input*) y tambien provee mercanismos de persistencia de datos, almacena las salida de la aplicacion(base de datos), o lo envia (*messaging*)
