@@ -199,7 +199,98 @@ Cuando el modelo del dominio es diseñado para publicar *Domain events*, la capa
 #### Hexagonal or Port and Adapters
 
 Permite a a múltiples clientes interactuar con el sistema.
-> Necesitas un nuevo cliente?. Agrega un adaptador para transformar el input del cliente a uno que sea entendido por la API interna de la aplicacion. 
+> Necesitas un nuevo cliente?. Agrega un adaptador para transformar el input del cliente a uno que sea entendido por la API interna de la aplicación. 
 
-**Un adaptador es creado para transformar los resultados de una aplicacion a una salida aceptable**.
-Existen dos areas primarias, *outside* y *inside*. La parte exterior permite a los clientes enviar entradas(*input*) y tambien provee mercanismos de persistencia de datos, almacena las salida de la aplicacion(base de datos), o lo envia (*messaging*)
+**Un adaptador es creado para transformar los resultados de una aplicación a una salida aceptable**.
+Existen dos áreas primarias, *outside* y *inside*. La parte exterior permite a los clientes enviar entradas(*input*) y también provee mecanismos de persistencia de datos, almacena las salida de la aplicación(base de datos), o lo envía (*messaging*)
+
+![Arquitectura Hexagonal](https://github.com/KillLoGiC/resumen/blob/master/images/hex.png)
+
+#### Design the Application Inside per Fucntional Requirements
+
+Cuando se utiliza la arquitectura hexagonal, se diseña la aplicación con el caso de uso en mente, no el numero de clientes a soportar. Cualquier numero o tipo de clientes puede pedir varios puertos, pero cada adaptador delega a la aplicación utilizando la misma API.
+
+La aplicación recibe peticiones a través de su API publica. Los  limites de la aplicación o *hexagono interno*, es también un uso de caso. En otras palabras, se debe crear usos de casos basados en requerimientos de la aplicación, no por el numero de clientes o salidas.
+
+> Cuando la aplicación recibe una petición a través de su API, utiliza el modelo del dominio para completar las peticiones, lo cual involucra a la lógica del negocio. En consecuencia, la API de la aplicación publica un conjunto de *Application Services*. *Application Services* son los clientes directos del modelo del dominio, al igual si se utilizara la arquitectura de capas.
+
+Es posible considerar la implementación de Repositorios como adaptadores persistentes, los cuales proveen el acceso a instancias Aggregates anteriormente creadas y almacenar nuevas. Adicionalmente, es posible tener implementaciones de repositorios para bases de datos relacionales, almacenamiento de documentos, cache distribuido, almacenamiento en memoria. Si la aplicación envía un Evento de Dominio para afuera, podría utilizar un Adaptador diferente para mensajería. 
+
+#### Representation State Transfer --REST 
+Es una abstracción de los elementos arquitectónicos dentro del sistema distribuido hypermedia. *REST* ignora los detalles de los componentes implementados y sintaxis del protocolo para enfocarse en los roles de componentes, limitaciones dentro de sus interacciones con otros componentes, y la interpretación de datos significativos.
+
+##### Stateless
+La interacción cliente-servidor: no debe de guardar estados en la comunicación. Tal que, cada  petición del cliente al servidor deberá contener toda la información necesaria para entender  la petición, y no puede  tomar ventaja del contexto almacenado en el servidor. 
+##### Cache
+Para poder mejorar la eficiencia de la red, se agrega la limitación *cache* para formar *client-cache-stateless-server*.La limitación cache requiere que los datos dentro de la respuesta  a la petición , sean  etiquetados implícitamente o explícitamente, como  cache o no-cache. 
+
+#### Key aspects of a RESTful HTTP Server
+
+Los recursos son el concepto clave. Un diseñador de sistemas decide que componentes serán accesibles desde el exterior, y  se asignan una entidad distinta. En general, cada recurso tiene un *URI*, el cual deberá apuntar a un recurso (las cosas que son alcanzables desde el exterior). Los recursos tienen representaciones, interpretaciones de sus estados, en uno o mas formatos.
+
+El siguiente concepto clave es la comunicación sin estados (*stateless communication*), utilizando mensajes auto descriptivos. Como una petición HTTP, la cual contiene toda la información que el servidor necesita. Es importante que el cliente y el servidor no dependan de peticiones individuales para establecer una sesión. Esto permite acceder a cada recurso independientemente de otras peticiones, este aspecto ayuda a un mejor escalamiento.
+
+
+Aspectos claves de REST:
+- Cada recurso tiene un URL, y cada URL apunta a un recurso que es expuesto.
+- Comunicación sin estados. Utiliza mensajes auto descriptivos. Como una *HTTP Request*, el cual lleva toda la información necesaria por el servidor. Esto permite acceder a cada recurso independientemente de otras peticiones, este aspecto ayuda alcanzar un escalamiento masivo.
+- Si se toman los objetos como recursos, a diferencia de otras arquitectura. Los métodos para invocar son fijos. Cada objeto soporta la misma interfaz. En RESTful HTTP, los métodos son *GET, PUT, POST, DELETE*.
+
+#### REST and DDD 
+
+Hay dos acercamientos para combinar DDD y RESTful HTTP: 
+1. Crear un limite de contexto separado para la capa de interfaces del sistema y usar estrategias para acceder al Dominio central desde el modelo de interfaz del sistema. Ejemplo:
+    >  Se crea un sistema que administra un grupo de trabajo, incluyendo   sus tareas,  horarios/citas, sub grupos, y todos los procesos necesarios para administrarlo. Se diseña  un modelo de dominio, el cual no contiene detalles de infraestructura, y captura el lenguaje ubicuo  e  implementa la lógica del negocio. Para publicar una interfaz  a este dominio, se provee una interfaz remote como un conjunto de recursos *RESTful*. 
+
+Hacer esto nos permite realizar cambios en el dominio central para después decidir si, cada cambio deberá ser reflejado en el modelo de interfaz del sistema y, si es así, la mejor forma de mapearlo.
+
+2. Es recomendado cuando se utilizan tipos de media. Si es necesario soportar un tipo especifico de media no solo por una interfaz del sistema pero una categoría con interacciones similares a cliente-servidor, un modelo del dominio puede ser creado para representar cada tipo de media. 
+
+Estos dos acercamientos tienen diferentes propósitos dependiendo de los términos de reusabilidad. Mientras mas especifica sea la solución se utiliza el primer acercamiento. Si la solución es mas general, y requiere estandarización se utiliza la segunda opción, *media-type-centric*.
+
+#### Event-Driven Architecture
+
+**Es la arquitectura de software que promueve la producción, detección, consumo de, y reacciones a eventos**.
+
+Los Eventos del dominio, modelan explícitamente procesos del negocio.
+#### Long-Running Process aka Saga
+
+Tres acercamientos para el diseno de *Long-Running Process*:
+
+- Diseña el proceso como una tarea compuesta, la cual es rastreada por un componente ejecutivo este graba los pasos y la completud de la tarea utilizando **objetos persistentes**. 
+- Diseña el proceso como un conjunto de parejas de *Aggregates*, las cuales colaborarán en un conjunto de actividades. Una o mas instancias de *aggregates* actuará como el *ejecutivo* y mantendrá el estado del proceso.
+- Diseña el proceso sin estados *stateless* donde, cada *message handler* debe de complementar cada evento recibido con información de progreso realizado al siguiente mensaje. El estado del proceso es mantenido solo en el cuerpo de cada mensaje enviado de colaborador a colaborador.
+
+### Chapter 5 Entities
+
+Se diseña un concepto del dominio como una entidad cuando es importante su individualidad, cuando es necesario distinguirlo de otros objetos en el sistema. Una entidad es única y tiene la capacidad de ser cambianda continuamente sobre un periodo de tiempo.
+
+Cuando un objeto es distinguido por su identidad, y no por sus atributos, has esto su principal definición. Mantén las definiciones de clases simples y enfocarte en la continuidad del ciclo de vida e identidad. Define un medio para distinguir cada objetos sin importar su forma o historia.
+
+#### Unique Identity
+
+En vez de enfocarnos en los atributos o comportamientos, desmantela la definición del objeto entidad hasta la característica mas intrínseca, particularmente aquellos o mas comúnmente usados para encontrarlo. Agrega solo el comportamiento que es esencial al concepto y a los atributos que requiere el comportamiento.
+
+**Los objetos valor pueden almacenar identificadores únicos**. Estos son inmutables, lo cual asegura estabilidad de identidad, y cualquier comportamiento especifico del tipo identidad es centralizado. 
+
+Consideraciones para la creación de identidades:
+- El usuario provee uno o mas valores originales únicos como entrada a la aplicación. La aplicación debe de asegurarse que estos son únicos.
+- La aplicación internamente genera una entidad utilizando un algoritmo que asegure la singularidad de este.
+- la aplicación depende de un almacenamiento persistente, como una base de datos, para generar un identidad única.
+- Otro limite de contexto ya ha determinado la identidad única. Es su entrada o es seleccionada por el usuario.
+
+La generación de identidad puede ocurrir ya sea en la construcción del objeto, o después, como parte del almacenamiento persistente.
+
+#### Construction
+Cuando se crea una nueva instancia de una entidad, es deseable utilizar un constructor para capturar el estado de la entidad y, además, para poder Identificarla y permitir a los clientes encontrarla. Si se diseña correctamente un constructor. Este toma por lo menos el UI como parámetro. Si la entidad es consultada de otra forma, como nombre o descripción, también es posible agregarlos a los parámetros del constructor.
+
+En algunas ocasiones una entidad mantiene una o más *invariants*. Las cuales son un estado que deben mantenerse idéntico a lo largo del ciclo de vida de la entidad. 
+
+Por definicion de la entidad, no es necesario mantener los cambios a los cuales es expuesta en su ciclo de vida. Solo se tiene que dar soporte al continuo cambio de estados.
+
+La forma mas practica para alcanzar un buen sistema de cambios es utilizando *Domain events* y *Event Store*. Se crea un unico tipo de evento para cada cambio de estado importante, el cual es ejecutado en un *aggregates*. Los eventos son publicados cuando sea completado. Un subscriptor se registra para revicir cada evento producido por el modelo. Cuando lo recibe, el subscriptor guarda el evento en un *event store*.
+
+### Chapter 6 Value Objects
+
+
+
