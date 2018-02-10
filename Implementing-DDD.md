@@ -292,5 +292,42 @@ La forma mas practica para alcanzar un buen sistema de cambios es utilizando *Do
 
 ### Chapter 6 Value Objects
 
+Un valor puede tener una existencia larga o corta. Es solo un valor que viene y se va cuando se le necesita.
+#### How do we determine if a domain concept sould be modeled as a Value?
 
+Es necesario prestar mucha atención a sus características. Cuando solo prestas atención a los atributos de un elemento en el modelo, clasificarlo como *Value object*. Hazlo expresar sus atributos que transmite y da la funcionalidad relacionada.Trata el objeto valor como inmutable. No le des una entidad y evita complexidad de diseño solo para mantener entidades.
+
+#### Value Characteristics
+
+Cuando se este decidiendo si un conceptos es un valor, tu debes de determinar, si posee la mayoria de estas caracteristicias:
+
+- Puede ser medible, contable, o describe una cosa en el dominio.
+
+    Cuando se tiene un verdadero objeto valor en el dominio, no es una cosa del dominio. Al contrario, es un concepto que mide, calcula, o ademas, describe un elemento en el dominio. La edad de una persona. La edad no es un elemento, pero mide o cuantifica el numero de años de una persona. El nombre no es un elemento pero describe como es el nombre de la persona.
+- Puede mantenerse inmutable.
+
+    Un objeto que es un valor es inmutable si no cambia después de ser creado.
+    
+- Puede modelar un concepto al unir atributos como una unidad integral.
+    
+    Un objeto valor puede poseer uno o varios atributos individuales, donde cada uno esta relacionado entre si. Cada atributo contribuye al todo. Si, se separa un atributo de los otros cada atributo falla en proveer cohesión. Es diferente a agrupar en conjunto de atributos en un objeto. Ejemplo. El valor 50,000 dolares tiene dos atributos: 50,000 y dolares. Estos atributos por separado no tienen un significado especial. Estos atributos juntos son un concepto que describen una medida monetaria. 
+
+- Puede ser completamente reemplazados cuando las medidas o descripciones cambien.
+    
+    Si el modelo tiene un valor inmutable deberá mantenerse como referencia por una entidad mientras que el estado actual describa el estado actual del *whole value*. Si deja de ser cierto, el valor es completamente reemplazado por un nuevo valor, el cual represente el estado actual.  **No se debe de utilizar un método para cambiar el estado de un valor. Ya que violaría la cualidad de inmutabilidad. Es preferible reemplazar el valor por completo *whole value*, asignando el objeto a otra nueva instancia.**
+- Puede ser comparado cuando otros utilizando *Value equality*.
+    
+    Cuando una instancia de objeto valor es comparado con otra instancia, un examen de equidad es empleado. A lo largo del sistema hay muchas instancias valor que son iguales, y aun así no son el mismo objeto. Equidad es determinada al comparar el tipo de objetos y sus atributos. Si ambos tipos y atributos son iguales, el valor es considerado igual.
+- Suministra a sus colaboradores con *Side-Effect-Free Behavior*
+    
+    **Una función es una operación de un objeto que produce un resultado pero sin modificar su propio estado**. Ya que, al no ocurrir modificaciones cuando se ejecuta una operación especifica, entonces esa operación no tiene efectos secundarios *side-effect*.
+
+** Cuando un método de un objeto valor tenga como parámetro una entidad, el resultado deberá poder usarse para que la entidad se modifique en sus propios términos.
+
+
+#### Testing Value Objects
+
+Para enfatizar *test-first*, se presentan pruebas antes de proveer la implementación de objetos valor. Estas pruebas están basadas en el diseño del modelo del dominio, ya que se proveen ejemplos de como un cliente usara cada objeto. En este punto esta mas enfocado en demostrar como varios objetos del modelo del dominio serán usados por el cliente y que esperan estos clientes cuando los utilicen. Es esencial asumir la perspectiva del cliente cuando se diseña un modelo en orden de capturar conceptos esenciales.
+
+Siempre hay que diseñar nuestro modelo de datos por el bien del modelo del dominio, y no al contrario.
 
