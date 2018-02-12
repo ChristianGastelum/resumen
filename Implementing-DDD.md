@@ -322,7 +322,7 @@ Cuando se este decidiendo si un conceptos es un valor, tu debes de determinar, s
     
     **Una función es una operación de un objeto que produce un resultado pero sin modificar su propio estado**. Ya que, al no ocurrir modificaciones cuando se ejecuta una operación especifica, entonces esa operación no tiene efectos secundarios *side-effect*.
 
-** Cuando un método de un objeto valor tenga como parámetro una entidad, el resultado deberá poder usarse para que la entidad se modifique en sus propios términos.
+**Cuando un método de un objeto valor tenga como parámetro una entidad, el resultado deberá poder usarse para que la entidad se modifique en sus propios términos**.
 
 
 #### Testing Value Objects
@@ -331,3 +331,61 @@ Para enfatizar *test-first*, se presentan pruebas antes de proveer la implementa
 
 Siempre hay que diseñar nuestro modelo de datos por el bien del modelo del dominio, y no al contrario.
 
+### Chapter 7 Services
+
+Un servicio en el dominio es una operación sin estados *stateless* que cumple una función especifica del dominio. El mejor indicio de que debemos crear un servicio en el modelo del dominio es cuando la operación que se necesita realizar esta fuera de lugar como un método en un **aggregates** o un **value object**. 
+
+**No queremos lógica del negocio en una *Application service* queremos la lógica en un *Domain Service*.** La diferencia entre un *application service* y un *domain service* es que la aplicación, es le cliente del dominio del modelo, lo cual naturalmente es el cliente del servicio del modelo.
+
+**Cuando una proceso significativo o trasformación en el dominio no es responsabilidad de una entidad o un valor objeto, es necesario agregar una operación autónoma en el modelo, la cual se declarará como un servicio**. **Es necesario definir la interfaz en términos del lenguaje del modelo y estar seguro que el nombre de la operación sea parte del lenguaje ubicuo. Ademas el servicio debe ser autónomo**.
+
+El modelo del dominio generalmente tiene que lidiar con comportamientos detallados, los cuales son están enfocados en un aspecto especifico del negocio, un servicio en el dominio tendería a pegarse a principios similares.
+
+Se pueden utilizar servicios para:
+
+- Realizar procesos significativos al negocio.
+- Trasformar un objeto del dominio de una composición a otra.
+- Calcular un valor requerido por una salida de uno o  más de un objeto del dominio.
+
+
+Un servicio en el dominio es bienvenido a utilizar repositorios cuantas veces sea necesario, pero acceder repositorios de una instancia de un *aggregates* no es recomendable.
+
+### Chapter 8 Domain Events 
+
+Un *Domain Event* es utilizado para capturar una accion que ha sucedido en el dominio. 
+
+Eventos que deben ser emitidos a servicios externos, donde el sistema de la empresa ha sido divido e incidencias deben ser comunicadas a lo largo de límites de contexto.
+
+Algunas palabras calves que nos ayudan a determinar el posible uso de eventos cuando se habla con un experto del dominio:
+
+- "Cuando" *When*
+- "Sí eso pasa" *If that happens*
+- "Informarme si..."*Inform me if*, "notificarme si" *Notify me if*
+- "Una acción de" *An occurrence of*
+
+Los eventos pueden eliminar la necesitad de *two phase commits* y respaldar las reglas de *aggregates*. Una regla de *aggregates* dice que solo una instancia debe ser modificada en una sola transacción, y todos los otros cambios dependientes deberán suceder en transacciones separadas.  Esta división de tareas ayuda a proveer un mejor escalamiento y rendimiento de entre servicios.
+
+Cuando se modela un evento, hay que nombrarlos de acuerdo a sus propiedades dentro del lenguaje ubicuo en el limite de contextos donde se origino. Si un evento es el resultado de ejecutar una operación en un *aggregates*, el nombre es derivado del comando ejecutado. El comando es la causa del evento, por lo tanto, el nombres del evento debe mencionar el comando en tiempo pasado.
+```
+Command Operation:  BackLogItem#commitTo(Sprint aSprint)
+Event Outcome:      BacklogitemCommitted
+```
+Después de nombrar el evento es necesario agregar la hora cuando el evento ocurrió. Ademas de esto, se puede incluir cualquier cosa que nos permita provocar el evento de nuevo. Esto usualmente incluye la entidad de la instancia de *aggregates* en donde tomó lugar, o la instancia de *aggregates* que lo invoco.
+
+**En un ambiente multiusuario guardar el *ID* siempre es necesario.**
+
+**Un evento es usualmente inmutable**.
+
+Primero que nada, la interfaz de un evento debe expresar el propósito de transmitir sus causas. La mayoría de eventos tiene un constructor que permita una instanciación completa, además de complementar con un *accessor/getter* para cada propiedad.
+
+#### With Aggregate Characteristics
+
+En algunas ocasiones los eventos son diseñados para que sean creados directamente por el usuario. Esto se hace en respuesta a algunas hechos que no son resultados directos del comportamiento ejecutado en una instancia de un *aggregates* en el modelo. **Posiblemente, un usuario del sistema inicia una acción que es considerada un evento por si mismo**. Cuando esto sucede, los eventos pueden ser modelados como *aggregates* y mantener su propio repositorio. Ya que representa acciones pasadas, su repositorio no permitirá su eliminación.
+
+Cuando los eventos son modelados de esta manera, se convierten en parte de la estructura del modelo. 
+
+Cuando un elemento es modelado de esta manera, puede ser publicado vía infraestructura de mensajería al mismo tiempo puede ser agregado a su repositorio. **El cliente podria llamar a un *domain service* para crear un evento, agregarlo a su repositorio, y luego publicarlo a traves de infraestrctura de mensajeria**. 
+
+Una vez que la mensajería guarde exitosamente el nuevo mensaje del evento en su almacenamiento persistente, entonces podría de forma sincrónica mandarlo a una *queue listener, topic/exhange susbscribers* o actores sí se utiliza el modelo de actores.
+
+# pagina 214
