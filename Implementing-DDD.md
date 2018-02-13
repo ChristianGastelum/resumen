@@ -388,4 +388,45 @@ Cuando un elemento es modelado de esta manera, puede ser publicado vía infraest
 
 Una vez que la mensajería guarde exitosamente el nuevo mensaje del evento en su almacenamiento persistente, entonces podría de forma sincrónica mandarlo a una *queue listener, topic/exhange susbscribers* o actores sí se utiliza el modelo de actores.
 
-# pagina 214
+#### Publishing Events from the Domain Model 
+
+Es necesario evitar exponer al modelo del dominio a cualquier infraestructura de mensajería. Un objeto valor puede poseer uno o varios atributos individuales, donde cada uno esta relacionado entre si. Cada atributo contribuye al todo. Si, se separa un atributo de los otros cada atributo falla en proveer cohesión. Es diferente a agrupar en conjunto de atributos en un objeto. Ejemplo. El valor 50,000 dolares tiene dos atributos: 50,000 y dolares. Estos atributos por separado no tienen un significado especial. Estos atributos juntos son un concepto que describen una medida monetaria. 
+
+### Publisher
+
+Tal vez el uso mas común de eventos es cuando un *aggregate* crea un evento y lo publica. El editor reside en un modulo en el modelo, pero no modela un aspecto del dominio. Mejor dicho, provee un simple servicio a un *aggregate* que necesita notificar a subscriptores de un evento.
+
+**The Application service controls the transaction**.
+
+Mandar un evento utilizando infraestructura de mensajería permite envíos asíncronos a subscriptores foráneos.
+
+##### Spreading the Nes to Remote Bounded Contexts 
+
+Existen diversas formas de hacer que limites de contextos remotos sean avisados de que un evento ha ocurrido en un limite de contexto. Existen un gran número de mensajeros tales como *ActiveMQ, RabbitMQ, Akka, NServiceBus, MassTransit*.
+
+El uso del mecanismos de mensajería entre limites de contexto requiere la adopción de compromiso de consistencia. El cambio en un modelo el cual tiene influencia en cambios en uno o mas modelos no sera consistente por un periodo de tiempo.
+
+#### Messaging Infraestructure Consistency
+
+Al menos dos mecanismos en la solución de mensajería deben de ser siempre consistentes uno con el otro: el almacenamiento persistente utilizado por el modelo del dominio y el almacenamiento persistente de la infraestructura de mensajería utilizada para enviar los eventos publicados por el modelo. Esto es un requisito para asegurar que los cambios que se realicen en lo modelo sean persistentes, el envió de eventos sea garantizado, y si un evento es enviado a través de mensajería, indica la situación actual reflejando el modelo que lo publicó.
+
+#### How is model and Event persistence consistency accomplished?
+1. El modelo del dominio y la infraestructura de mensajería comparten el mismo almacenamiento persistente(*data source*). Esto permite los cambios del modelo y la introducción de un nuevo mensaje para enviar bajo la misma transacción local.    
+    - Ventaja. Permite un buen rendimiento
+    - Desventaja. El almacenamiento del sistema de mensajería debe de estar en la misma base de datos del modelo.
+2.  El almacenamiento persistente  del modelo del dominio  y  de la mensajería deben de estar bajo una transacción global o XA (*two-phace commit*).
+
+    - Ventaja. Permite mantener los almacenamientos separados.
+    - Desventaja. Las transacciones globales tienen rendimiento pobre.
+3. Se crea un almacenamiento especial para eventos en el mismo almacenamiento donde es almacenado el modelo del dominio. Esto es un **Event Store**.
+    
+    - Ventaja. El almacenamiento no es controlado ni pertenece a la mensajería si no, al limite de contexto. Los componentes foráneos creados utilizan el *event store* para almacenar lo publicado, eliminar publicaciones *unpublished* a través de mecanismos de la mensajería. 
+    - Desventajas. El mensajero de eventos debe ser personalizado para poder mandar mensajes utilizando la mensajería, y los clientes deben ser diseñados para  mensajes duplicados.
+
+Se recomienda utilizar mensajería asíncrona para alcanzar un alto grado de independencia entre los sistemas. 
+
+Un evento contiene una cantidad limitada de parametros y/o estado de *aggregate* que dara suficiente significado que permitira a los limites de contextos subscritos a reaccionar correctamente.
+
+**Si es necesario replicar conceptos, objetos, y sus asociaciones con otros modelos en el modelo actual, es recomendable utilizar RPC**.
+
+pagina 221
