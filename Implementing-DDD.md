@@ -10,7 +10,7 @@ Los fundamentos principales de DDD están basados en la discusión, escuchar, en
  
 
  Durante este proceso de creado del **lenguaje ubicuo** es necesario entablar conversaciones con *expertos del dominio*.
-Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un * experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su área de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje ubicuo**.
+Los *expertos del dominio* son aquellos que conocen como funciona el negocio. Un *experto del domino*  no esta basado en  "títulos". Ya que, existen personas que conocen su área de negocio bastante bien. Por lo tanto, ellos pueden proveer información vital para el **lenguaje ubicuo**.
 
 #### ¿Qué es un modelo del dominio?
 Es un modelo basado en software, el cual esta basado en un dominio de negocio. También considerado como *modelo objeto*, donde existen objetos, los cuales tienen datos y comportamientos en base al negocio. Crear un *modelo del domino* es esencial para poder utilizar DDD. Utilizando DDD los *modelos del dominio* tienden a ser pequeños y enfocados.
@@ -425,8 +425,18 @@ Al menos dos mecanismos en la solución de mensajería deben de ser siempre cons
 
 Se recomienda utilizar mensajería asíncrona para alcanzar un alto grado de independencia entre los sistemas. 
 
-Un evento contiene una cantidad limitada de parametros y/o estado de *aggregate* que dara suficiente significado que permitira a los limites de contextos subscritos a reaccionar correctamente.
+Un evento contiene una cantidad limitada de parámetros y/o estado de *aggregate* que dará suficiente significado que permitirá a los limites de contextos subscritos a reaccionar correctamente.
 
 **Si es necesario replicar conceptos, objetos, y sus asociaciones con otros modelos en el modelo actual, es recomendable utilizar RPC**.
 
-pagina 221
+#### Event Store 
+
+Tener un almacenamiento para todos los eventos de un solo limite de contexto tienen varios beneficios. Considerar que se podría hacer si se almacenara cada evento por cada comportamiento del modelo:
+1. Se podría utilizar el almacenamiento de eventos como cola de publicación para todos los eventos del dominio a través de una mensajería. Permite la integración entre limites de contextos, donde el subscriptor remoto reacciona a los eventos en los términos de su propio contexto.
+2. Se puede utilizar el mismo almacenamiento de eventos para mandar notificaciones a clientes en base REST. 
+3. Permite revisar historial de cada comando que se ha ejecutado en el modelo. Esto podría ayudar a encontrar errores en e código.
+4. La información almacenada puede ser utilizada dentro de una herramienta de análisis.
+5. Se pueden utilizar eventos para reconstruir cada instancia de *aggregate* cuando es obtenido de un repositorio. Esto es un requisito para *Event Sourcing*.
+6. Dada aplicación, deshacer bloques de cambios a un *aggregate*.
+
+pagina 232
