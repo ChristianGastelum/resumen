@@ -425,8 +425,31 @@ Al menos dos mecanismos en la solución de mensajería deben de ser siempre cons
 
 Se recomienda utilizar mensajería asíncrona para alcanzar un alto grado de independencia entre los sistemas. 
 
-Un evento contiene una cantidad limitada de parametros y/o estado de *aggregate* que dara suficiente significado que permitira a los limites de contextos subscritos a reaccionar correctamente.
+Un evento contiene una cantidad limitada de parámetros y/o estado de *aggregate* que dará suficiente significado que permitirá a los limites de contextos subscritos a reaccionar correctamente.
 
 **Si es necesario replicar conceptos, objetos, y sus asociaciones con otros modelos en el modelo actual, es recomendable utilizar RPC**.
 
-pagina 221
+#### Event Store 
+
+Mantener un almacenamiento para todos los eventos del dominio para un limite de contexto tiene varios beneficios. Considere que podría hacer si fueras a almacenar un evento por cada comportamiento de cada comando que es ejecutado.
+1. Utilizar un *event store* como cola para publicar todos los eventos a través de mensajería. 
+2. Se puede utilizar el mismo *event store* para alimentar el notificado de eventos basado en REST a una lista de clientes.
+3. Examinar el historial de resultados de cada comando que ha sido ejecutado en el modelo. Esto podría ayudar a rastrear errores, no solo en el modelo sino en los clientes.
+4. Utilizar los datos para análisis del negocio. 
+5. Utilizar los eventos para reconstruir cada instancia de *aggregate* cuando sale de un repositorio. 
+6. Dada una aplicación del punto anterior, poder deshacer cambios en un *aggregate*.
+
+**Una de las primeras cosas que se necesitan hacer es crear un subscriptor que reciba cada evento que es publicado fuera del modelo**.
+
+#### Publishing Notifications as RESTful Resources
+
+El estilo de notificación REST trabaja mejor cuando es utilizado en un ambiente que sigue las premisas básicas de *Pubhish Subscribe*. Aquí un resumen de los ventajas y desventajas del acercamiento REST:
+- Si potencialmente muchos clientes pueden ir a un buen conocido URI para pedir el mismo conjunto de notificaciones, Este acercamiento funciona bien. Esencialmente las notificaciones son enviadas a cualquier numero de clientes. 
+- Si uno o mas clientes requieren obtener eventos de múltiples orígenes, REST no es la opción apropiada. Esto describe una cola, donde potencialmente muchos orígenes necesitan notificar a uno o mas clientes, y el orden de recepción importa. Un modelo encuesta *polling model* no es una buena opción para implementar colas.
+
+El acercamiento REST para publicar notificaciones de eventos es distinto a una mensajeria tipica. El *publisher*  no mantienee un conjunto de *subscribers* registrados por que nada es enviado a los grupos interesados. En lugar de esto, los clientes REST obtiene las notificaciones usando URI.
+
+Los clientes utilizan el metodo de HTTP *Get* para obtener el ultimo registro. 
+
+### Chapter 9 Modules
+
