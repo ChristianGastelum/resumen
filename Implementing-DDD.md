@@ -453,3 +453,104 @@ Los clientes utilizan el metodo de HTTP *Get* para obtener el ultimo registro.
 
 ### Chapter 9 Modules
 
+Los modulos en el modelo sirven como un contenedor para clases que son altamente cohesivo con otra. El objetivo debe ser poca union entre clases que estan en diferentes modulos. 
+
+**Escoge modulos que cuenten la historia del sistema que contengan un conjunto de conceptos cohesivos. Esto produce poca union entre modulos, si no es asi, busca una forma de cambiar el modelo para desenredar los conceptos. Da nombres a los modulos para que formen parte al lenguaje ubicuo y los nombres deben reflejar una perspectiva del dominio**.
+
+#### Simple rules for Module Design 
+
+|Module Do's and Don'ts | Why|
+|---|----|
+| Diseña módulos que encajen con los conceptos de modelado| Típicamente se tiene un modulo por algunos *aggregates*, los cuales son cohesivos, si solo por referencia|
+|Nombra a los módulos en base al lenguaje ubicuo| Este es un objetivo básico de DDD, pero también tiende a venir naturalmente si se piensa en los conceptos que son modelados|
+|No crear módulos mecánicamente de acuerdo a componentes de tipo o patrones utilizados en el modelo| Nuestro modelo nos e beneficiara si segregamos a todos los *aggregates* en un modulo, todos los servicios en otro modulo, todas las fabricas en otro. Piensa en el dominio , No solo pienses en los tipos de componentes o patrones que usas para resolver el problema que se encuentra enfrente tuyo|
+| Diseña a los módulos libres| Asegura que los módulos sean independientes de los otros que tienen los mismos beneficios de las clases. Esto hará que sea fácil de mantener, de separar conceptos|
+| Esfuérzate por las dependencias acíclicas en los módulos pares donde se necesita acoplamiento| es raramente posible o practico que los módulos sean completamente independiente entre ellos. Después de todo, un modelo del dominio implica alguna unión. Pero, tu reducirás la unión de los componentes si piensas en los términos de dependencia entre dos módulos pares e unidireccionales (ejemplo, productos dependen de un equipo, pero equipos no dependen de productos)|
+| No ser tan estricto con las reglas entre módulos padres e hijos| Es realmente difícil pretender independencia entre módulos  padres e hijos|
+| No crees módulos como un concepto estático en el modelo, pero permite que se moldeen con objetos que ellos organizan| Si los conceptos del modelo son maleables y toman diferente forma, comportamiento, y nombres sobre el tiempo, es  muy probable que los módulos que organizan estos mismos conceptos deberán ser creados, renombrados, y borrados de la misma manera. |
+
+#### Module Naming Convertions for the Model 
+
+El nombre de los módulos debe de identificar el limite de contexto. 
+
+Utilizando el ejemplo de SaaSovation se nombraron los módulos de la siguiente manera:
+
+- com.saasovation.identityaccess.domain 
+- com.saasovation.collaboration.domain 
+- com.saasovation.agilepm.domain 
+
+Esto es compatible con la arquitectura de capas y la arquitectura hexagonal. Con la arquitectura hexagonal se tiene una parte interna de la aplicación, la cual incluya la parte del dominio. ** El compartimiento *domain* puede único a interfaces/clases que sirvan únicamente como contenedores de módulos debajo nivel.
+
+- com.saasovation.identityaccess.domain.model
+- com.saasovation.collaboration.domain.model
+- com.saasovation.agilepm.domain.model
+
+Aquí es donde las clases del modelo deben ser definidas. Este nivel de paquete puede contener interfaces reutilizables y clases abstractas.
+
+En este ejemplo Saasovation colocara en este modulo interfaces comunes, tales como las utilizadas para la publicación de eventos, clases abstractas para entidades y objetos valor.
+
+
+### Chapter 10 Aggregates
+
+¿Un *aggregates* es solo un grafo de objetos relacionados bajo un mismo padre? Sí es así,  ¿Existe un limite de objetos que puedan ser permitidos en el grafo? ¿Ya que una instancia de *aggregate* puede  referenciar a otras instancias de *aggregate* la asociación puede navegar, modificando varios objetos a lo largo del viaje? ¿Y de que se trata el concepto de *invariants* y *consistency boundary* ? La respuesta de esta ultima pregunta tiene gran influencia sobre las otras preguntas.
+
+#### Rule: Model True Invariants in Consistency BOundaries
+
+Cuando se trata de descubrir los *aggregates* en un limite de contexto, es necesario entender las verdaderas *invariants* del modelo. Solo con ese conocimiento se puede determinar que objetos deberán ser agrupados en un *aggregate*.
+
+**Una *invariant* es una regla de negocio que debe ser siempre consistente**.  Existen varias formas de consistencia. 
+
+- *Transactional consistency* Es considerada inmediata y atómica.
+- *Eventual consistency*
+
+Ejemplo:
+```
+Si se tiene la operación
+
+    a + b = c 
+
+donde *a* es 2, *b* es 3, *c* debe de ser 5.
+De acuerdo a esta regla y condiciones, sí *c* es cualquier cosa pero 5, el sistema *invariant* es violada. 
+Para segurar que *c* sea consistente, se disena un limite alrededor de estos atributos especificos del modelo:
+
+    AggregateType1 {
+        int a;
+        int b;
+        int c;
+
+        operations ...
+    }
+```
+Los limites de consistencia aseguran que todo dentro cumplan con un conjunto de reglas *invariants* del negocio no importan que operaciones estén realizando. Por lo tanto, *aggregates* es un sinónimo de **limites de consistencia transaccional**. En el ejemplo anterior *Aggregatetype1* tiene tres atributos tipo *int*, pero cualquier *aggregate* puede tener atributos de diversos tipos.
+
+Cuando se emplea un mecanismo tipo de persistencia, se utiliza una sola transacción para mantener consistencia. Cuando la transacción se ejecuta, todo lo que se encuentre dentro de los limites debe ser consistente. *Un aggregate bien diseñado puede ser modificado de cualquier forma requerida por el negocio con sus *invariants* consistentes dentro de una sola transacción.
+
+El hecho de que los *aggregates* deban ser diseñados con el enfoque de consistencia implica que la interfaz de usuarios deberá concentrar cada pedido para ejecutar un solo comando en una sola instancia de *aggregate*. Si las peticiones del usuario tratan de completar muchas cosas, la aplicación sera forzada a modificar múltiples instancias a la vez.
+
+Por lo tanto, *aggregates* tienen su enfoque en los limites de consistencia y no motivados por el deseo de disenar grafos. 
+
+#### Rule: Design Small *aggregates*
+
+Limitar el *aggregate* a solo la entidad raiz *root entity*  y un numero minimo de atributos y/o propiedades de atributos. El numero  minimo correcto son aquellos los cuales son necesarios.
+
+¿ Pero cuales son necesarios? Aquellos que deben ser consistentes con tros, aunque los expertos del dominio no los especifiquen como reglas.  Por ejemplo:
+
+```
+Los atributos Product, name y description. No nos podemos imaginar que nombre y descripción  sean inconsistentes, si son modelados en diferentes aggregates. 
+Cuando se cambia el nombre, probablemente también se necesite cambiar la `descripción. 
+Sí se cambia uno y no el otro, es probable porque se esta arreglando un error o mejorando la descripción para que sea mas adecuada al nombre.
+```
+
+¿Qué tal si se decide modelar una parte contenida como una entidad? Para esto, es necesario preguntarlos si la parte cambia sobre el tiempo, o si puede ser completamente reemplazada cuando los cambios se requieran. Los casos donde instancias pueden ser reemplazadas apuntan al uso de *object value* y no una entidad. Algunas veces entidades son necesarias. Es recomendable favorecer tipo de valores como parte de *aggregate* no significa que los *aggregate* sea inmutable por que el objeto raíz *root object* cambia cuando las propiedades de los tipos de valores son reemplazados.
+
+#### Rule: Reference other Aggregates by Identity 
+
+Un *aggregate* puede referenciar a una raíz de otro *aggregate*. Aun así, es necesario recordar que esto no coloca la referencia dentro de los límites de consistencia del *aggregate*  La referencia no causa la formación de un *aggregate*. Por ejemplo en Java se modelaria de la siguiente manera:
+
+``` Java 
+public class BackLogItem extends COncurrencySsafeEntity {
+    ...
+    private Product product;
+}
+
+```
