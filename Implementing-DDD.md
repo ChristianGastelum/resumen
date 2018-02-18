@@ -431,7 +431,7 @@ Un evento contiene una cantidad limitada de parámetros y/o estado de *aggregate
 
 #### Event Store 
 
-<<<<<<< HEAD
+
 Mantener un almacenamiento para todos los eventos del dominio para un limite de contexto tiene varios beneficios. Considere que podría hacer si fueras a almacenar un evento por cada comportamiento de cada comando que es ejecutado.
 1. Utilizar un *event store* como cola para publicar todos los eventos a través de mensajería. 
 2. Se puede utilizar el mismo *event store* para alimentar el notificado de eventos basado en REST a una lista de clientes.
@@ -548,6 +548,10 @@ Sí se cambia uno y no el otro, es probable porque se esta arreglando un error o
 
 Un *aggregate* puede referenciar a una raíz de otro *aggregate*. Aun así, es necesario recordar que esto no coloca la referencia dentro de los límites de consistencia del *aggregate*  La referencia no causa la formación de un *aggregate*. Por ejemplo en Java se modelaria de la siguiente manera:
 
+
+![Aggregate](https://github.com/KillLoGiC/resumen/blob/master/images/aggre.png)
+
+
 ``` Java 
 public class BackLogItem extends COncurrencySsafeEntity {
     ...
@@ -555,14 +559,3 @@ public class BackLogItem extends COncurrencySsafeEntity {
 }
 
 ```
-=======
-Tener un almacenamiento para todos los eventos de un solo limite de contexto tienen varios beneficios. Considerar que se podría hacer si se almacenara cada evento por cada comportamiento del modelo:
-1. Se podría utilizar el almacenamiento de eventos como cola de publicación para todos los eventos del dominio a través de una mensajería. Permite la integración entre limites de contextos, donde el subscriptor remoto reacciona a los eventos en los términos de su propio contexto.
-2. Se puede utilizar el mismo almacenamiento de eventos para mandar notificaciones a clientes en base REST. 
-3. Permite revisar historial de cada comando que se ha ejecutado en el modelo. Esto podría ayudar a encontrar errores en e código.
-4. La información almacenada puede ser utilizada dentro de una herramienta de análisis.
-5. Se pueden utilizar eventos para reconstruir cada instancia de *aggregate* cuando es obtenido de un repositorio. Esto es un requisito para *Event Sourcing*.
-6. Dada aplicación, deshacer bloques de cambios a un *aggregate*.
-
-pagina 232
->>>>>>> 888125382a04bb3393a2c23b692508c4d4765ed7
