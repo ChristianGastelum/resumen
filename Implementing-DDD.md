@@ -559,3 +559,9 @@ public class BackLogItem extends COncurrencySsafeEntity {
 }
 
 ```
+
+#### Making Aggregates Work Together Through Identity References 
+
+Es preferible referencias a *aggregates* externos utilizando su *identificador global único*, y no mantener referencia al objeto directamente (puntero).
+
+![Imagen 10.6]()
