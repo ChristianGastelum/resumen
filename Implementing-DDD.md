@@ -648,3 +648,19 @@ Cambiar la responsabilidad de crear instancias de objetos complejos y *aggregate
 Una fabrica puede o no tener responsabilidades adicionales en el modelo del dominio otras aparte de crear objetos. Un objeto tiene el único propósito de instanciar un tipo especifico de *aggregate* no tendrá otras responsabilidades y no deberá ser considerado como ciudadano de primera clase en el modelo. Es solo una fabrica. Un raíz *aggregate* que provee un método fabrica para producir instancias de otro tipo de *aggregate* tendrá como su principal responsabilidad en proveer su principal comportamiento, el método fabrica es solo uno de estos.
 
 Uno de los casos que se puede obtener grandes beneficios del las fabricas es cuando se crean objetos de diferentes tipos en una clase hereditaria, el cual es un caso clásico.  El cliente necesita dar solo los parámetros básicos los cuales la fabrica utiliza para determinar el tipo concreto que creará.  
+
+**Cuando se tiene el comportamiento de un metodo que exprese el lenguaje ubicuo en manera que no es posible si se utiliza solo un constructor**. 
+
+
+### Chapter 13 Repositories 
+
+Un repositorio usualmente hace referencia a un lugar de almacenamiento, el cual consiste en un lugar seguro o donde se almacenan cosas. Cuando se almacena algo en un repositorio y luego se regresa a sacarlo, se tiene la expectativa que el estado sera el mismo que cuando se almaceno al inicio.
+
+Cuando se almacena una instancia de *aggregate* en su correspondiente repositorio, y luego se utiliza el repositorio para extraer la misma instancia, el producto esperado es el objeto. Sí se altera una instancia preexistente de un *aggregate*, que es extraída de un repositorio, los cambios serán persistentes. 
+
+Por cada vez tipo de objeto que necesita acceso global, crea un objeto que pueda proveer la ilusión de una colección  una instancia preexistente de un *aggregate* , que es extraída de un repositorio, los cambios serán persistentes. 
+
+Por cada vez tipo de objeto que necesita acceso global, crea un objeto que pueda proveer la ilusión de una colección en memoria de todos los objetos de ese tipo. Configura acceso global utilizando interfaces bien definidas. Provee métodos para agregar y remover objetos. Provee métodos para seleccionar objetos en base a algún criterio y que su resulta sea un objeto o un conjunto de objetos completamente instanciados, los cuales cumplen con el criterio. Provee repositorios solo para *aggregates*.
+
+
+
