@@ -33,7 +33,7 @@ Es un modelo basado en software, el cual esta basado en un dominio de negocio. T
 Primordialmente se debe de utilizar DDD en areas esenciales del negocio. *You invest in the nontrivial, the more complex stuff, the most valuable and important stuff that promises to return the greatest dividends*. Por esta razón se le llama *Core domain*. Este  y sus sub dominios son a los cuales se debe de enfocar  toda la atención. 
 
 #### Bounded Context
-Is un límite conceptual alrededor de una aplicación o un sistema finito. La razón detrás de este límite es acentuar que cada término, frase u oración (lenguaje ubicuo) dentro del dominio tiene un significado específico. 
+Es un límite conceptual alrededor de una aplicación o un sistema finito. La razón detrás de este límite es acentuar que cada término, frase u oración (lenguaje ubicuo) dentro del dominio tiene un significado específico. 
 
 
 #### Ubiquitous Language
@@ -75,7 +75,7 @@ El lenguaje ubicuo es un lenguaje compartido por un equipo que trabaja dentro de
    Los desarrolladores son  orientados a utilizar  un enfoque  de negocio.  
 6. La arquitectura empresarial es mejor organizada.
     
-    Cuando los límites del contexto son bien definidos y cuidadosamente particionados, todos los equipos  tienen un  claro entendimiento  de *donde* y  *por que* las integraciones son necesarias. Los límites son  explícitos,  y las relaciones entre ellos también. 
+    Cuando los límites del contexto son bien definidos y cuidadosamente particionados, todos los equipos  tienen un  claro entendimiento  de *donde* y  *porqué* las integraciones son necesarias. Los límites son  explícitos,  y las relaciones entre ellos también. 
 7. Ágil, iterativo(repetitivo), modelado continuo es usado.
     
     El objetivo de DDD es refinar el modelo mental de los expertos del dominio a un modelo útil para el negocio.
@@ -179,12 +179,12 @@ Una de las grandes ventajas de DDD es que no requiere el uso específico de una 
 
 La demanda de  la calidad de software deberá  alentar al uso de estilos de arquitecturas y patrones.  Los seleccionados deberán proveer o exceder los requisitos de calidad  
 
-#### layers
+#### Layers
 El patrón de arquitectura de capas es considera por muchos como el abuelo de todos. Soporte N-sistemas y es comúnmente utilizado en la web, empresas, y aplicaciones de escritorio. 
 
-**Separa la expresión del modelo del dominio y la lógica de negocio, y elimina cualquier dependencia de infraestructura, interfaz de usuario, o lógica de aplicación que no sea lógica de negocio. Divide software complejo en capas. Desarrolla un diseño dentro de cada capa que sea coherente y depende únicamente de la capa anterior.
+**Separa la expresión del modelo del dominio y la lógica de negocio, y elimina cualquier dependencia de infraestructura, interfaz de usuario, o lógica de aplicación que no sea lógica de negocio. Divide software complejo en capas. Desarrolla un diseño dentro de cada capa que sea coherente y depende únicamente de la capa anterior**.
 
-El dominio central reside en una capa en la arquitectura. Arriba esta la interfaz de usuario UI, y capas de aplicación. Debajo de todo esta la capa de infraestructura.
+El dominio central reside en una capa en la arquitectura. Arriba está la interfaz de usuario UI, y capas de aplicación. Debajo de todo esta la capa de infraestructura.
 
 ![Capas ](https://github.com/KillLoGiC/resumen/blob/master/images/layers.png)
 
@@ -564,4 +564,87 @@ public class BackLogItem extends COncurrencySsafeEntity {
 
 Es preferible referencias a *aggregates* externos utilizando su *identificador global único*, y no mantener referencia al objeto directamente (puntero).
 
-![Imagen 10.6]()
+![Imagen 10.6](https://github.com/KillLoGiC/resumen/blob/master/images/referAggre.png)
+
+Se dividira la fuente en:
+
+``` Java
+public class backlogitem extends Concurrencyssafeentity {
+    ...
+    private ProductId productid;
+    ...
+}
+```
+
+Los *aggregate* con referencias de objetos son automaticamente mas pequenos por que las referencias nunca son cargadas automaticamente. 
+
+#### Model Navigation
+
+Se recomienda utilizar un repositorio o servicio para buscar objetos dependientes antes de invocar el comportamiento del *aggregate*. 
+
+#### Scalability and Distributtion
+
+Ya que, no se utilizan referencias directas a otros *aggregates* pero si las referencias por identidad, el estado de persistencia puede alcanzar  una gran escala. *Almost-infinite scalability* puede ser alcanzado si se permite división continua del almacenamiento de datos del *aggregate*. 
+
+#### Rule: Use eventual Consistency Outside the Boundary
+
+Cualquier regla que utilice *aggregates* no estará todo actualizado todo el tiempo.  A través, de cada proceso, u otros mecanismos de actualización, otras dependencias pueden resolverse en un tiempo especifico. 
+
+Por lo tanto, si al ejecutar un comando en una instancia de *aggregate* requiere que una o mas *aggregate* ejecuten una o mas reglas, es recomendable utilizar *eventual consistency*. Hay que aceptar que no todas las instancias de *aggregate* en un ambiente empresarial serán consistentes, esto nos ayuda aceptar que la consistencia eventual tiene sentido en pequeña escala cuando pocas instancias son involucradas.
+
+##### How to know when to choose  Transactional or eventual consistency
+
+**Cuando se examine el caso de uso, es necesario preguntarse sí,  es trabajo del usuario ejecutar el caso de uso para que los  datos sean consistentes. Si es así, se utiliza consistencia transaccional, pero solo si se siguen las otras reglas de *aggregate*.  Si es el trabajo de otro usuario, u otro sistema, se utiliza consistencia eventual**. 
+
+#### Reasons to Break The Rules 
+
+##### Reason one: user interface Convenience
+
+Algunas veces las interfaces de usuario, permiten a los usuarios definir características comunes de muchas cosas a la vez para poder crear un conjunto de estas. La interfaz de usuario permite que se introduscan todas las propiedades comunes en una seccion, y entonces, una por una las propiedades diferentes, lo cual elimina la repeticion de tareas. 
+
+##### Reason Two: Lack of Technical Mechanisms
+
+Las consistencias eventuales requieren el uso de procesamiento *out-of-band*, tales como: mensajería, temporizadores, o tareas de fondo *background threads*. ¿Que pasa si no contamos con estos componentes? En este caso, nos veremos forzados a modificar dos o más *aggregate* en una transacción.
+
+##### Reason Three: Global Transactions
+
+Hay que considerar el uso de tecnologías *legacy*  y políticas empresariales. 
+
+
+##### Reason Four: Query Performance
+
+Existen ocasiones donde es mejor tener punteros a objetos de otros *aggregates*. Esto puede ser usado para reducir los problemas de rendimiento de las consultas sobre repositorios.
+
+
+
+ 
+#### Implementation
+##### Create a Root Entity with Unique Identity 
+
+Cada raiz debe de disenarse con un identificador unico global. 
+
+##### Favor Value Objects Parts 
+
+Escoge para modelar una parte del *aggregate* como objeto valor *object value* en vez de una entidad siempre y cuando sea posible. Una parte contenida puede ser completamente reemplazable, si el reemplazo no causa costo elevado en el modelo o infraestructura. 
+
+Usualmente, cuando se utilizan *key-value* o *document store*, las instancias *aggregate* son típicamente serializadas como un valor de representación del almacenamiento.
+
+#### Using Law of Demeter and Tell, Don't Ask
+
+- **Law of Demeter**: Esta guia se enfoca en el principio de menos conocimiento. Piensa en un objeto cliente y otro objecto que el objeto cliente utiliza para ejecutar algún comportamiento del sistema; nos podemos referir a este segundo objeto como *server*. Cuando el objeto cliente usa el objeto servidor, deberá saber lo menos posible de la estructura del servidor. Los atributos del servidor y propiedades deberán ser completamente desconocidas para el cliente. El cliente puede pedirle al servidor que ejecute un comando que esta declarado en la interfaz. Aunque, el cliente no deba de alcanzar el servidor, pedir al servidor por una parte interna, y después ejecutar un comando en esta parte. Si el cliente necesita un servicio que se encuentra dentro de las partes internas del servidor, el cliente no debe de obtener servicio a estas partes para ejecutar un comando. El servidor deberá proveer una interfaz y, cuando sea invocada, delegar permisos para ejecutar el comando.
+
+     En resumen: cualquier método en cualquier objeto puede invocar métodos solo si sucede lo siguiente: 1. Es si mismo, 2 un parámetro es pasado a el, 3 un objeto que instancia, 4 una parte del objeto auto contenida puede ser accedido directamente.
+
+- **Tell, Don't Ask**: Esta guia reafirma que los objetos deben de hacer lo que se les dice. Esto aplica de la siguiente forma: Un objeto cliente no deberá preguntar al objeto servidor por sus partes internas, para luego tomar una decisión en base al estado de estas, y luego hacer que el objeto servidor realice una tarea.
+
+### Chapter 11. Factories
+
+#### Factories in the Domain Model: 
+
+Las principales motivaciones para utilizar fabricas:
+
+Cambiar la responsabilidad de crear instancias de objetos complejos y *aggregate* a un objeto separado, el cual puede no tener responsabilidad en el modelo del dominio pero aun forma parte del diseño del dominio.  Provee una interfaz que encapsula toda la complejidad y no requiere que el cliente haga referencia a clases concretas las cuales están siendo instanciadas. Crear *aggregate* como una pieza, refuerza sus *invariants*.
+
+Una fabrica puede o no tener responsabilidades adicionales en el modelo del dominio otras aparte de crear objetos. Un objeto tiene el único propósito de instanciar un tipo especifico de *aggregate* no tendrá otras responsabilidades y no deberá ser considerado como ciudadano de primera clase en el modelo. Es solo una fabrica. Un raíz *aggregate* que provee un método fabrica para producir instancias de otro tipo de *aggregate* tendrá como su principal responsabilidad en proveer su principal comportamiento, el método fabrica es solo uno de estos.
+
+Uno de los casos que se puede obtener grandes beneficios del las fabricas es cuando se crean objetos de diferentes tipos en una clase hereditaria, el cual es un caso clásico.  El cliente necesita dar solo los parámetros básicos los cuales la fabrica utiliza para determinar el tipo concreto que creará.  
