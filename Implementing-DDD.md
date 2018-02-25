@@ -652,7 +652,7 @@ Uno de los casos que se puede obtener grandes beneficios del las fabricas es cua
 **Cuando se tiene el comportamiento de un metodo que exprese el lenguaje ubicuo en manera que no es posible si se utiliza solo un constructor**. 
 
 
-### Chapter 13 Repositories 
+### Chapter 12 Repositories 
 
 Un repositorio usualmente hace referencia a un lugar de almacenamiento, el cual consiste en un lugar seguro o donde se almacenan cosas. Cuando se almacena algo en un repositorio y luego se regresa a sacarlo, se tiene la expectativa que el estado sera el mismo que cuando se almaceno al inicio.
 
@@ -663,4 +663,62 @@ Por cada vez tipo de objeto que necesita acceso global, crea un objeto que pueda
 Por cada vez tipo de objeto que necesita acceso global, crea un objeto que pueda proveer la ilusión de una colección en memoria de todos los objetos de ese tipo. Configura acceso global utilizando interfaces bien definidas. Provee métodos para agregar y remover objetos. Provee métodos para seleccionar objetos en base a algún criterio y que su resulta sea un objeto o un conjunto de objetos completamente instanciados, los cuales cumplen con el criterio. Provee repositorios solo para *aggregates*.
 
 
+Los *aggregate* son los únicos que tienen repositorios. Sí no se esta utilizando *aggregates*  en un  limite de contexto,  los repositorios no serán muy útiles. 
 
+Existen dos tipos de diseño de repositorios, *collection-oriented* y *persistence-oriented*.
+
+#### Collection-oriented Repositories
+
+Este diseño se puede considerar como el acercamiento tradicional por que apega a las ideas básicas del patrón DDD.
+
+En muchos lenguajes OOP los objetos son añadidos a una colección, y son mantenidos ahí hasta que son removidos. No se necesita nada especial para hacer que una colección reconozca los cambios a los objetos, solo se requiere pedir a la colección una referencia a un objeto especifico y luego hacer una petición al objeto, lo cual modifica su estado. El mismo objeto se mantiene en la colección, y ahora el objeto es diferente del otro que fue anteriormente modificado.
+
+**Un repositorio deberá parecerse a una colección de conjuntos. No importa la especificación de los mecanismos de persistencia, *no se debe de permitir que las instancias de un objeto sea almacenado dos veces*. Además, cuando obtengan objetos de un repositorio y se modifiquen, *no es necesario guardarlos nuevamente en el repositorio***.
+
+Un repositorio orientado a colecciones imita a una colección en que ninguna de las partes de los mecanismos persistentes son mostrados al cliente por una interfaz publica. 
+
+Los mecanismos de persistencia deberán tener algunos mecanismos de almacenamiento persistente. Estos deberán de poder tener la habilidad de mantener el seguimiento de los cambios de cada objeto. Esto puede ser obtenidos de varias maneras:
+
+- **Implicit Copy-on-Read**.  El mecanismo de persistencia copia implícitamente el estado de cada objeto en lectura cuando este es reconstruido de *data store* y lo compara con su copia del cliente para ser enviado. . Cuando al mecanismo persistente se le pide leer un objeto del *data store*, lo hace  y luego copia el objeto. Cuando una transacción es creada a través de un mecanismo persistente, los mecanismos de persistencia busca modificaciones en la copia del objeto y los compara. Todos los cambios al objeto son enviados al *data store*.
+- **Implicit Copy-on-Write**. Los mecanismos de persistencia administran todas las cargas de objetos a través de un proxy. Cada objeto es cargado del *data store*, un pequeño proxy es creado, el cual se le da al cliente. El cliente sin saber invoca el comportamiento en el proxy del objeto, el cual refleja el comportamiento al objeto real. Cuando el proxy recibe la primera invocación, crea una copia del objeto. El proxy mantiene los cambios de estados del objeto y los marca. Cuando la transacción es creada a través de los mecanismos persistentes, busca por objetos marcados y todos son enviados al *data store*.
+
+La ventaja de cualquiera de estos acercamientos es el que los cambios de en los objetos son seguidos implícitamente, no requieren conocimiento del cliente o intervención de mecanismos de persistencia. 
+
+#### Pesistence-oriented Repositories
+
+Cuando los mecanismos de persistencia no detecten implícitamente o explícitamente los cambios de un objeto. Esto pasa cuando se utiliza *in-memory Data Fabric* o NoSQL. Cada vez que se cree una instancia de un *aggregate* o se realice un cambio a uno ya existente, es necesario almacenarlo en el *data store* utilizando *save()* o algún método parecido del método repositorio.
+
+Cuando se utiliza *collection-oriented*, los *aggregate* son añadidos solo cuando son creados. Por lo contrario, *persistence-oriented* las instancias de *aggregate* deben ser almacenadas cuando son creadas y cuando son modificadas.
+
+Aunque estos tipos de estilos imitan a una colección *Map*, desafortunadamente es necesario utilizar ``` put() ``` para añadir objetos nuevos y los cambios a objetos, asi reemplazando los valores previos asociados con una llave determinada. Esto tambien sucede cuando un objeto es cambiado es lógicamente el mismo objeto que ya esta almacenado, por que estos no proveen seguimiento de estados. Mejor dicho, cada ``` put() ``` y ``` putAll() ``` representan una transacción lógica diferente.
+
+Al utilizar este tipo de almacenamiento permite simplificar las escrituras y lecturas de los *aggregates*. Por ejemplo, considere la simplicidad de agregar esto a ``` product ```
+
+``` 
+cache.put (product.productId(), product);
+    // later ...
+
+product = cache.get(productId);
+```
+
+Como se puede ver la instancia ```product ``` es automaticamente serializada. 
+
+Cuando se utiliza las bases de datos NoSQL, probablemente se quiera utilizar rápidos y compactos métodos de conversión para *aggregate* de su forma serializada o su forma objeto. Para optimizar la visualización de los *aggregates* se puede crear un mapeo de descripción.
+
+#### MongoDB Implementation
+
+1. Una forma de transformar las instancias de *aggregates* a formato MongoDB, y luego transformarlo a su formato original. MongoDB utiliza un formato llamo BSON.
+2. Una identidad generada por MongoDB, la cual es asignada al *aggregate*.
+3. Una referencia al nodo/cluster de MongoDB.
+4. Una colección única donde se almacene el tipo *aggregate*. Todas las instancias de tipo *aggregate* deberan ser convertidas como un conjunto llave-valor (*key-value*)
+
+
+#### Managing Transactions
+
+Un acercamiento utilizado para facilitar transacciones del aspectos del modelo del dominio es manejarlos en la capa de la aplicación. Generalmente, se crea un *Facade* para caso de uso donde se agrupan direcciones por aplicación o sistema. El *facade* esta diseñado con métodos del negocio, generalmente un método por cada caso de uso. Cada método coordinada una tarea requerida por cada caso de uso. Cuando un método de un *facade* es invocado por la capa de interfaz del usuario, el método inicia una transacción y luego actúa como cliente en el modelo del dominio. Una vez qué la transacción haya terminado, el método envía los resultados de esta. Sí un error ocurre, el cual impide que se finalize el caso de uso, la transacción vuelve a su estado original.
+
+Para enlistar cambios en el modelo del dominio en una transacción, hay que asegurarse que la implementación de repositorios tenga acceso a la misma sesión o unidad de trabajo de la transacción que la capa de aplicación haya iniciado. De esta forma las modificaciones hechas en la capa del dominio seran enviadas de forma apropiada a una base de datos o retrocederán a su estado original. 
+
+#### Testing Repositories
+
+Hay dos formas para probar repositorios. Se necesita probar los repositorios ellos mismos para saber si funcionan corresctamente. También sé debe de probar con código el cual utiliza repositorios. Para éste es necesario utilizar una implementación de producción. De otra forma no se podría saber si el código de producción funciona correctamente. Para el segundo tipo,  se puede usar implementaciones de producción, o se puede utilizar implementaciones de memoria.
