@@ -1,0 +1,12 @@
+---
+title: "Modulación DDD"
+author: "Christian Eder Gastélum Reyes"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+Una aplicación la cual  permita facilitar la migración de infraestructura a la nube.
+

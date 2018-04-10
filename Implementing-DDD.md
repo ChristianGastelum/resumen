@@ -690,35 +690,82 @@ Cuando los mecanismos de persistencia no detecten implícitamente o explícitame
 
 Cuando se utiliza *collection-oriented*, los *aggregate* son añadidos solo cuando son creados. Por lo contrario, *persistence-oriented* las instancias de *aggregate* deben ser almacenadas cuando son creadas y cuando son modificadas.
 
-Aunque estos tipos de estilos imitan a una colección *Map*, desafortunadamente es necesario utilizar ``` put() ``` para añadir objetos nuevos y los cambios a objetos, asi reemplazando los valores previos asociados con una llave determinada. Esto tambien sucede cuando un objeto es cambiado es lógicamente el mismo objeto que ya esta almacenado, por que estos no proveen seguimiento de estados. Mejor dicho, cada ``` put() ``` y ``` putAll() ``` representan una transacción lógica diferente.
+Aunque estos tipos de estilos imitan a una colección *Map*, desafortunadamente es necesario utilizar *put()* para añadir objetos nuevos y los cambios a objetos, así reemplazando los valores previos asociados con una llave determinada. Esto también sucede cuando un objeto es cambiado es lógicamente el mismo objeto que ya esta almacenado, por que estos no proveen seguimiento de estados. Mejor dicho, cada ** put()** y **putAll()** representan una transacción lógica diferente.
 
-Al utilizar este tipo de almacenamiento permite simplificar las escrituras y lecturas de los *aggregates*. Por ejemplo, considere la simplicidad de agregar esto a ``` product ```
+Al utilizar este tipo de almacenamiento permite simplificar las escrituras y lecturas de los *aggregates*. Por ejemplo, considere la simplicidad de agregar esto a  product
 
-``` 
+``` Java 
 cache.put (product.productId(), product);
     // later ...
 
 product = cache.get(productId);
 ```
 
-Como se puede ver la instancia ```product ``` es automaticamente serializada. 
+Como se puede ver la instancia product  es automáticamente serializadas. 
 
-Cuando se utiliza las bases de datos NoSQL, probablemente se quiera utilizar rápidos y compactos métodos de conversión para *aggregate* de su forma serializada o su forma objeto. Para optimizar la visualización de los *aggregates* se puede crear un mapeo de descripción.
+Cuando se utiliza las bases de datos NoSQL, probablemente se quiera utilizar rápidos y compactos métodos de conversión para *aggregate* de su forma serializadas o su forma objeto. Para optimizar la visualización de los *aggregates* se puede crear un mapeo de descripción.
 
 #### MongoDB Implementation
 
 1. Una forma de transformar las instancias de *aggregates* a formato MongoDB, y luego transformarlo a su formato original. MongoDB utiliza un formato llamo BSON.
 2. Una identidad generada por MongoDB, la cual es asignada al *aggregate*.
 3. Una referencia al nodo/cluster de MongoDB.
-4. Una colección única donde se almacene el tipo *aggregate*. Todas las instancias de tipo *aggregate* deberan ser convertidas como un conjunto llave-valor (*key-value*)
+4. Una colección única donde se almacene el tipo *aggregate*. Todas las instancias de tipo *aggregate* deberán ser convertidas como un conjunto llave-valor (*key-value*)
 
 
 #### Managing Transactions
 
-Un acercamiento utilizado para facilitar transacciones del aspectos del modelo del dominio es manejarlos en la capa de la aplicación. Generalmente, se crea un *Facade* para caso de uso donde se agrupan direcciones por aplicación o sistema. El *facade* esta diseñado con métodos del negocio, generalmente un método por cada caso de uso. Cada método coordinada una tarea requerida por cada caso de uso. Cuando un método de un *facade* es invocado por la capa de interfaz del usuario, el método inicia una transacción y luego actúa como cliente en el modelo del dominio. Una vez qué la transacción haya terminado, el método envía los resultados de esta. Sí un error ocurre, el cual impide que se finalize el caso de uso, la transacción vuelve a su estado original.
+Un acercamiento utilizado para facilitar transacciones del aspectos del modelo del dominio es manejarlos en la capa de la aplicación. Generalmente, se crea un *Facade* para caso de uso donde se agrupan direcciones por aplicación o sistema. El *facade* esta diseñado con métodos del negocio, generalmente un método por cada caso de uso. Cada método coordinada una tarea requerida por cada caso de uso. Cuando un método de un *facade* es invocado por la capa de interfaz del usuario, el método inicia una transacción y luego actúa como cliente en el modelo del dominio. Una vez qué la transacción haya terminado, el método envía los resultados de esta. Sí un error ocurre, el cual impide que se finalice el caso de uso, la transacción vuelve a su estado original.
 
-Para enlistar cambios en el modelo del dominio en una transacción, hay que asegurarse que la implementación de repositorios tenga acceso a la misma sesión o unidad de trabajo de la transacción que la capa de aplicación haya iniciado. De esta forma las modificaciones hechas en la capa del dominio seran enviadas de forma apropiada a una base de datos o retrocederán a su estado original. 
+Para en listar cambios en el modelo del dominio en una transacción, hay que asegurarse que la implementación de repositorios tenga acceso a la misma sesión o unidad de trabajo de la transacción que la capa de aplicación haya iniciado. De esta forma las modificaciones hechas en la capa del dominio serán enviadas de forma apropiada a una base de datos o retrocederán a su estado original. 
 
 #### Testing Repositories
 
-Hay dos formas para probar repositorios. Se necesita probar los repositorios ellos mismos para saber si funcionan corresctamente. También sé debe de probar con código el cual utiliza repositorios. Para éste es necesario utilizar una implementación de producción. De otra forma no se podría saber si el código de producción funciona correctamente. Para el segundo tipo,  se puede usar implementaciones de producción, o se puede utilizar implementaciones de memoria.
+Hay dos formas para probar repositorios. Se necesita probar los repositorios ellos mismos para saber si funcionan correctamente. También sé debe de probar con código el cual utiliza repositorios. Para éste es necesario utilizar una implementación de producción. De otra forma no se podría saber si el código de producción funciona correctamente. Para el segundo tipo,  se puede usar implementaciones de producción, o se puede utilizar implementaciones de memoria.
+
+#### Chapter 13 Integrating Bounded Contexts 
+
+##### Integration Basics
+
+Cuando hay dos o más limites de contextos que necesitan ser integrados, existen algunas formas razonables para hacer esto en código.
+
+1. Exponer el limité de contexto por medio de una API, y otro contexto utiliza esta API para realizar llamadas remotas o RPCs. 
+2. Utilizar mecanismos de mensajería. Cada sistema necesita interactuar con este, a través de colas de mensajes o *Publish-Subscribe*.
+3. Utilizando *RESTful HTTP*. *REST* es un medio para intercambio y modificación de recursos que son identificados únicamente al utilizar *URI*. Varias operaciones pueden ser realizadas en cada recurso.
+
+##### Distributed Systems Are Fundamentally Different
+
+###### Principles of Distributed Computing:
+- La conexión no es confiable.
+- Siempre hay algo de latencia, y aveces mucha.
+- La banda ancha no es infinita.
+- No asumir que la conexión es segura.
+- Las topologías de redes cambian.
+- El conocimiento y políticas se encuentran Distribuidas entre múltiples administradores.
+- El transportar información a través de la red tiene un costo.
+- La red es heterogénea.
+
+##### Exchanging Information across System Boundaries
+
+En muchas ocasiones cuando necesitamos que un sistema externos nos provea información a nuestro sistema, necesitamos mandar información al servicio. Los servicios algunas veces necesitan responder. Por ende, necesitamos una forma confiable para enviar información de sistema a sistema. Esta información necesita ser enviada de forma estructurada entre los diferentes sistemas la cual pueda ser consumida rápidamente. 
+
+Los datos como parámetros son solo estructuras que pueden ser leídos por la maquina, y ser generados en varios formatos.
+
+Existen múltiples formas de generar estructuras que se pueden utilizar para intercambio de información entre sistemas. Una implementación técnica se basa en los lenguajes de programación, los que facilitan la transformación (*serialized*) de objetos a una forma binaria y lo regresan al estado original. Esto también requiere el despliegue de interfaces y clases de objetos que son utilizados en un sistema.
+
+Otro acercamiento es construir estructuras para el intercambio de información Utilizando un formato estándar intermedio. Algunas opciones que se pueden usar son *XML*, *JSON*, o algún formato especializado.
+
+#### Integration Using RESTful Resources
+
+Cuando un contexto provee un conjunto de recursos *RESTful* a través de *URIs*, es un tipo de *Open Host Service*: 
+        
+        Define un protocolo que de acceso a tu subsistema como un conjunto de servicios. 
+        Deja el protocolo abierto para qué todo lo que necesite integración lo pueda utilizar.
+        Mejora y expande el protocolo para que pueda procesar nuevos requisitos.
+
+
+##### Long-Running Processes, and avoiding Responsability
+
+Pagina 333
+
+
